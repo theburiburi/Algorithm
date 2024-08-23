@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main{ //1174 백트래킹
+public class 1174{ //1174 백트래킹
     static List<Long> list = new ArrayList<>();
     static int arr[] = {9,8,7,6,5,4,3,2,1,0};
 
