@@ -1,35 +1,71 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.StringTokenizer;
+import java.util.PriorityQueue;
+public class Main{
+    static int N;
+    static int answer = 0;
+    static int arr[][];
+    static int ining = 0;
+    static int score[];
+    public static void main(String[] args)throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        N = Integer.parseInt(br.readLine());
 
-public class Main{ //1174 백트래킹
-    static List<Long> list = new ArrayList<>();
-    static int arr[] = {9,8,7,6,5,4,3,2,1,0};
+        for (int i=0; i<N; i++){
+            arr = new int[N][9];
+            PriorityQueue<Integer> pq = new PriorityQueue<>();
+            score = new int[10];
 
-    public static void main(String args[])throws IOException{
-        Scanner in = new Scanner(System.in);
+            st = new StringTokenizer(br.readLine());
+            for (int j=0; j<9; j++){
+                if(j==0){
+                    arr[i][3] = Integer.parseInt(st.nextToken());
+                }
+                pq.add(Integer.parseInt(st.nextToken()));
+            }
 
-        int N = in.nextInt();
-        dfs(0, 0);
-        list.sort(Comparator.naturalOrder()); //오름차순
+            while(true){ //0을 제외하고 숫자부터 추출하기 위한 작업
+                int temp = pq.peek();
+                if(temp == 0){
+                    pq.poll();
+                }
+                else{
+                    break;
+                }
+            }
+            int k = ining;
+            while(pq.size()>0){ //첫 타자부터 1안타부터 채우기
+                arr[i][k++] = pq.poll();
+                if(k==3) {k++;}
+            }
+            int count = 0; //3아웃 체크를 위해
+            int scoreNum = 1;
+            while(count < 3){
+                if(arr[i][ining] == 0){
+                    count++;
+                }
+                else{
+                    for (int q=0; q<scoreNum; q++){
+                        score[ining] += arr[i][ining];
+                    }
+                    if(scoreNum < 10){
+                        scoreNum++;
+                    }
+                   for(int q=0; q<10; q++){
+                    if(score[q] >= 4){
+                        score[q] = 0;
+                        answer++;
+                    }
+                   }
+                }
 
-        try{
-            System.out.println(list.get(N-1));    
+                if(++ining == 10) {ining = 0;} //다음 타자
+            }
         }
-        catch(Exception e){
-            System.out.println(-1);
-        }
-    }
-    public static void dfs(long num, int depth){
-        if(!list.contains(num)){
-            list.add(num);
-        }
-        if (depth >= 10){
-            return;
-        }
-        dfs(num*10 + arr[depth], depth+1);
-        dfs(num,depth+1);
     }
 }
