@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class Main{
+public class Main1{
     static int answer = 0;
     static int N;
     static int M;
