@@ -31,14 +31,14 @@ public class 14500{//14500 브루트포스 구현
         }
         for(int i=0; i<N; i++){
             for(int j=0; j<M; j++){
+                visited[i][j] = true;
                 solution(1, arr[i][j], i, j);
-                solution2(1, arr[i][j], i, j);
+                visited[i][j] = false;
             }
         }
         System.out.println(answer);
     }
     static void solution(int depth, int sum, int y, int x){ // 나머지 모양
-        visited[y][x] = true;
         if(depth == 4){
             answer = Math.max(answer, sum);
             return;
@@ -48,30 +48,17 @@ public class 14500{//14500 브루트포스 구현
             int j = x+dx[z];
             if (0<= i && i < N && 0<= j && j < M){
                 if(visited[i][j] == false){
+                    if(depth == 2){
+                        visited[i][j] = true;
+                        solution(depth+1, sum + arr[i][j], y, x);
+                        visited[i][j] = false;
+                    }
                     visited[i][j] = true;
                     solution(depth+1, sum + arr[i][j], i, j);
-                    solution2(depth+1, sum + arr[i][j], i, j);
                     visited[i][j] = false;
                 }
             }
         }
     }
-    static void solution2(int depth, int sum, int y, int x){ // ㅗ ㅓ ㅏ ㅜ 모양 만들기,,
-        visited[y][x] = true;
-        if(depth == 4){
-            answer = Math.max(answer, sum);
-            return;
-        }
-        for(int z=0; z<4; z++){
-            int i = y+dy[z];
-            int j = x+dx[z];
-            if (0<= i && i < N && 0<= j && j < M){
-                if(visited[i][j] == false){
-                    visited[i][j] = true;
-                    solution(depth+1, sum + arr[i][j], y, x);
-                    visited[i][j] = false;
-                }
-            }
-        }
-    }
+
 }
