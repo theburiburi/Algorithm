@@ -1,75 +1,50 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.lang.reflect.Array;
 import java.util.StringTokenizer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main{
-    static int N, M;
-    static ArrayList<Integer> graph[];
-    static boolean visited[];
-    static int depth[];
-    static int parent[];
+    static int N;
+    static ArrayList<String> tree[];
     static StringBuilder sb;
-    public static void main(String args[])throws IOException{
+    
+    public static void main(String args[]) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         sb = new StringBuilder();
         StringTokenizer st;
 
         N = Integer.parseInt(br.readLine());
-        graph = new ArrayList[N+1];
-        visited = new boolean[N+1];
-        depth = new int[N+1];
-        parent = new int[N+1];
-
-        for(int i=1; i<=N; i++){
-            graph[i] = new ArrayList<>();
-        }
-        for (int i=1; i<N; i++){
+        Trie root = new Trie();
+        for(int i=0; i<N; i++){
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            graph[b].add(a);
-            graph[a].add(b);
-        }
-        M = Integer.parseInt(br.readLine());
-        dfs(1, 1);
-        for(int i=0; i<M; i++){
-            st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            
-            solution(a, b);
-        }
+            int K = Integer.parseInt(st.nextToken());
 
-        System.out.println(sb.toString());
-    }
-    static void dfs(int now, int dep){
-        visited[now] = true;
-        depth[now] = dep;
-        for (int next: graph[now]){
-            if(!visited[next]){
-                parent[next] = now;
-                dfs(next, dep+1);
+            Trie total = root;
+            for(int j=0; j<K; j++){
+                String next = st.nextToken();
+                if(!total.childs.containsKey(next)){
+                    total.childs.put(next, new Trie());
+                }
+                total = total.childs.get(next);
             }
         }
+        printTrie(root, "");
+        System.out.println(sb.toString());
     }
-    static void solution(int a, int b){
-        int ADepth = depth[a];
-        int BDepth = depth[b];
-
-        while(ADepth > BDepth){
-            ADepth--;
-            a = parent[a];
+    public static void printTrie(Trie root, String sentence){
+        Object key[] = root.childs.keySet().toArray();
+        Arrays.sort(key);
+        for(Object temp : key){
+            sb.append(sentence).append(temp).append("\n");
+            printTrie(root.childs.get(temp), sentence+"--");
         }
-        while(ADepth < BDepth){
-            BDepth--;
-            b = parent[b];
-        }
-        while(a != b){
-            a = parent[a];
-            b = parent[b];
-        }
-        sb.append(a).append("\n");
+    }
+    static class Trie{
+        HashMap<String, Trie> childs = new HashMap<>();
     }
 }
