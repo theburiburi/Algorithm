@@ -1,50 +1,47 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.util.StringTokenizer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Stack;
 
-public class Main{
+public class 6443{ //6443 문자열 백트래킹
     static int N;
-    static ArrayList<String> tree[];
+    static int[] count;
+    static char[] ch;
+    static int chLen;
     static StringBuilder sb;
-    
-    public static void main(String args[]) throws IOException{
+    static Stack<Character> stack;
+    public static void main(String args[])throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        sb = new StringBuilder();
-        StringTokenizer st;
-
         N = Integer.parseInt(br.readLine());
-        Trie root = new Trie();
         for(int i=0; i<N; i++){
-            st = new StringTokenizer(br.readLine());
-            int K = Integer.parseInt(st.nextToken());
-
-            Trie total = root;
-            for(int j=0; j<K; j++){
-                String next = st.nextToken();
-                if(!total.childs.containsKey(next)){
-                    total.childs.put(next, new Trie());
-                }
-                total = total.childs.get(next);
+            count = new int[26];
+            ch = br.readLine().toCharArray();
+            for(char c : ch){
+                count[c-'a']++;
+            }
+            chLen = ch.length;
+            stack = new Stack<>();
+            sb = new StringBuilder();
+            dfs(0);
+            System.out.print(sb.toString());
+        }
+    }
+    static void dfs(int depth){
+        if(depth == chLen){
+            for(char temp : stack){
+                sb.append(temp);
+            }
+            sb.append("\n");
+            return;
+        }
+        for(int i=0; i<26; i++){
+            if(count[i] > 0){
+                count[i]--;
+                stack.add((char)(i + 'a'));
+                dfs(depth+1);
+                stack.pop();
+                count[i]++;
             }
         }
-        printTrie(root, "");
-        System.out.println(sb.toString());
-    }
-    public static void printTrie(Trie root, String sentence){
-        Object key[] = root.childs.keySet().toArray();
-        Arrays.sort(key);
-        for(Object temp : key){
-            sb.append(sentence).append(temp).append("\n");
-            printTrie(root.childs.get(temp), sentence+"--");
-        }
-    }
-    static class Trie{
-        HashMap<String, Trie> childs = new HashMap<>();
     }
 }
