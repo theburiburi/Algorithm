@@ -1,82 +1,70 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.PriorityQueue;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.StringTokenizer;
 
-public class Main{ //1414 스트링, 크루스칼
-    static int N = 3;
-    static PriorityQueue<int[]> pq;
-    static int parent[];
-    static int count = 1;
-    public static void main(String args[])throws IOException{
+public class Main {
+    static int N;
+    static int DDD, hh, mm;
+    static int F;
+
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
-        int topology[][] = new int[N+1][N+1];
-        parent = new int[N+1];
-        int total = 0;
+        StringTokenizer st;
+        String line[] = br.readLine().split(" ");
+        HashMap <String, String> rent = new HashMap<>();
+        HashMap <String, Long> fine = new HashMap<>();
+        
+        N = Integer.parseInt(line[0]);
+        DDD = Integer.parseInt(line[1].substring(0, 3));
+        hh = Integer.parseInt(line[1].substring(4,6));
+        mm = Integer.parseInt(line[1].substring(7,9));
+        F = Integer.parseInt(line[2]);
 
-        pq = new PriorityQueue<>((o1, o2)-> o1[2] - o2[2]);
-        for(int i=1; i<=N; i++){
-            String line = br.readLine();
-            for(int j=1; j<=N; j++){
-                topology[i][j] = charToNum(line.charAt(j-1));
+        long rentRange = DDD*1440 + hh*60 + mm;
 
-                if(topology[i][j]==0) continue;
-                total += topology[i][j];
-                if(i==j) continue;
-                pq.add(new int[]{i,j,topology[i][j]});
+        for(int i = 0; i<N; i++){
+            st = new StringTokenizer(br.readLine());
+            String date = st.nextToken();
+            String time = st.nextToken();
+            String stuff = st.nextToken();
+            String user = st.nextToken();
+            String id = user + "_" + stuff;
+
+            if(rent.containsKey(id)){
+                String stringTime1 = rent.get(id);
+                String stringTime2 = date+" "+time;
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+                long rentTime = (sdf.parse(stringTime2).getTime() - sdf.parse(stringTime1).getTime()) / (1000*60);
+                if(rentRange < rentTime){
+                    if(fine.containsKey(user)){
+                        fine.put(user, fine.get(user)+(rentTime-rentRange)*F);
+                    }
+                    else{
+                        fine.put(user, (rentTime-rentRange)*F);
+                    }
+                }
+                rent.remove(id);
             }
-            parent[i] = i;
-        }
-        int answer = total - kruskal();
-
-        if(count == N) System.out.println(answer);
-        else System.out.println(-1);
-
-    }
-    public static int charToNum(char character){
-        if ('a' <= character && character <= 'z'){
-            return character - 'a' + 1;
-        }
-        else if ('A' <= character && character <= 'Z') {
-            return character - 'A' + 27;
-        }
-        else{
-            return 0;
-        }
-    }
-    public static int kruskal(){
-        int cost = 0;
-        while(!pq.isEmpty()){
-            int [] temp = pq.poll();
-            int x_parent = find(temp[0]);
-            int y_parent = find(temp[1]);
-            if(x_parent != y_parent){
-                union(x_parent, y_parent);
-                cost += temp[2];
-                count++;
+            else{
+                rent.put(id, date+" "+time);
             }
         }
-        return cost;
-    }
 
-    public static int find(int x){
-        if(x == parent[x]){
-            return x;
+        if(fine.size() > 0){
+            ArrayList <String> al = new ArrayList<>(fine.keySet());
+            StringBuilder sb = new StringBuilder();
+            al.sort((s1,s2)->s1.compareTo(s2));
+            for(String temp : al){
+                sb.append(temp+" "+fine.get(temp)).append("\n");
+            }
+            System.out.println(sb.toString());
         }
         else{
-            return parent[x] = find(parent[x]);
-        }
-    }
-
-    public static void union(int x, int y){
-        x = find(x);
-        y = find(y);
-        if(x<y){
-            parent[y] = x; 
-        }
-        else{
-            parent[x] = y;
+            System.out.println(-1);
         }
     }
 }
