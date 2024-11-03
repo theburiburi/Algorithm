@@ -1,37 +1,64 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+import java.util.TreeSet;
 
-public class Main{//String , KMP
+public class Main{
+    static TreeSet<String> set;
+    static StringBuilder sb;
+    static List<int []> AL;
+    static boolean[] visited;
+    static String sentence;
+    static int senLen;
     public static void main(String args[])throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        sentence = br.readLine();
+        Stack<Integer> stack = new Stack<>();
+        AL = new ArrayList<>();
+        set = new TreeSet<>();
+        sb = new StringBuilder();
 
-        String sentence = br.readLine();
-        int maxLen = 0;
-
-        int senLen = sentence.length();
+        senLen = sentence.length();
+        visited = new boolean[senLen];
         for(int i=0; i<senLen; i++){
-            String subString = sentence.substring(i, senLen);
-            maxLen = Math.max(maxLen, kmp(subString));
+            if (sentence.charAt(i) == '('){
+                stack.add(i);
+            }
+            else if(sentence.charAt(i) == ')'){
+                AL.add(new int[] {stack.pop(), i});
+            }
         }
-        System.out.println(maxLen);
+
+        dfs(0);
+
+        for(String temp : set){
+            sb.append(temp+"\n");
+        } // set.stream().forEach(ans -> sb.append(ans).append("\n"));
+        System.out.println(sb.toString());
     }
-    static int kmp(String subString){
-        int max = 0;
-        int LI = 0;
-        int subLen = subString.length();
-        int pi[] = new int[subLen];
-
-        for(int RI=1; RI<subLen; RI++){
-            while(LI>0 && subString.charAt(LI) != subString.charAt(RI)){
-                LI = pi[LI-1];
+    static void dfs(int index){
+        if(index == AL.size()){
+            StringBuilder senBuilder = new StringBuilder();
+            for (int i=0; i<senLen; i++){
+                if(!visited[i]){
+                    senBuilder.append(sentence.charAt(i));
+                }
             }
-            if(subString.charAt(LI) == subString.charAt(RI)){
-                pi[RI] = ++LI;
-                max = Integer.max(max, pi[RI]);
+            String sen = senBuilder.toString();
+            if(!sen.equals(sentence)){
+                set.add(sen);
             }
+            return;
         }
 
-        return max;
+        visited[AL.get(index)[0]] = true;
+        visited[AL.get(index)[1]] = true;
+        dfs(index+1);
+        visited[AL.get(index)[0]] = false;
+        visited[AL.get(index)[1]] = false;
+        dfs(index+1);
     }
 }
