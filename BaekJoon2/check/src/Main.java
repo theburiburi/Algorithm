@@ -1,64 +1,68 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-import java.util.TreeSet;
+import java.util.StringTokenizer;
 
-public class Main{
-    static TreeSet<String> set;
-    static StringBuilder sb;
-    static List<int []> AL;
-    static boolean[] visited;
-    static String sentence;
-    static int senLen;
+public class Main{//11812 공통조상 찾기
+    static long N;
+    static int K, Q;
     public static void main(String args[])throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        sentence = br.readLine();
-        Stack<Integer> stack = new Stack<>();
-        AL = new ArrayList<>();
-        set = new TreeSet<>();
-        sb = new StringBuilder();
-
-        senLen = sentence.length();
-        visited = new boolean[senLen];
-        for(int i=0; i<senLen; i++){
-            if (sentence.charAt(i) == '('){
-                stack.add(i);
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
+        N = Long.parseLong(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+        Q = Integer.parseInt(st.nextToken());
+        for(int i=0; i<Q; i++){
+            st = new StringTokenizer(br.readLine());
+            long a = Long.parseLong(st.nextToken());
+            long b = Long.parseLong(st.nextToken());
+            long ans;
+            if(K == 1){
+                ans = Math.abs(a-b);
             }
-            else if(sentence.charAt(i) == ')'){
-                AL.add(new int[] {stack.pop(), i});
+            else{
+                ans = solution(a,b);
             }
+            sb.append(ans).append("\n");
         }
-
-        dfs(0);
-
-        for(String temp : set){
-            sb.append(temp+"\n");
-        } // set.stream().forEach(ans -> sb.append(ans).append("\n"));
         System.out.println(sb.toString());
     }
-    static void dfs(int index){
-        if(index == AL.size()){
-            StringBuilder senBuilder = new StringBuilder();
-            for (int i=0; i<senLen; i++){
-                if(!visited[i]){
-                    senBuilder.append(sentence.charAt(i));
-                }
-            }
-            String sen = senBuilder.toString();
-            if(!sen.equals(sentence)){
-                set.add(sen);
-            }
-            return;
+    static long solution(long a, long b){
+        long ans = 0;
+        long aDep = depth(a);
+        long bDep = depth(b);
+        if(aDep < bDep){
+            long tempDep = aDep;
+            long temp = a;
+            aDep = bDep;
+            bDep = tempDep;
+            a = b;
+            b = temp;
+        }
+        while(aDep != bDep){
+            a = getParent(a);
+            aDep--;
+            ans++;
+        }
+        while(a != b){
+            a = getParent(a);
+            b = getParent(b);
+            ans += 2;
         }
 
-        visited[AL.get(index)[0]] = true;
-        visited[AL.get(index)[1]] = true;
-        dfs(index+1);
-        visited[AL.get(index)[0]] = false;
-        visited[AL.get(index)[1]] = false;
-        dfs(index+1);
+        return ans;
+    }
+    static long getParent(long a){
+        return ((a+(K-2)) / K);
+    }
+    static long depth(long a){
+        long dep=0;
+
+        while(a != 1){
+            a = getParent(a);
+            dep++;
+        }
+        return dep;
     }
 }
