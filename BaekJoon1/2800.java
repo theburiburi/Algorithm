@@ -33,7 +33,7 @@ public class 2800{//2800 String, brute force
         }
 
         dfs(0);
-
+        set.remove(sentence);
         for(String temp : set){
             sb.append(temp+"\n");
         } // set.stream().forEach(ans -> sb.append(ans).append("\n"));
@@ -48,9 +48,7 @@ public class 2800{//2800 String, brute force
                 }
             }
             String sen = senBuilder.toString();
-            if(!sen.equals(sentence)){
-                set.add(sen);
-            }
+            set.add(sen);
             return;
         }
 
