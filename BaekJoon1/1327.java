@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 
-public class Main {//1327 해시맵, 그래프
+public class 1327 {//1327 해시맵, 그래프
     static int N, K, S;
     static String ans_str, ch_str;
     public static class Node{
