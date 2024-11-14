@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {//1525 해시맵
+public class 1525 {//1525 해시맵
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         Map<String, Integer> map = new HashMap<>();
