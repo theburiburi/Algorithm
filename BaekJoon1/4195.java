@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main{
+public class 4195{ //4195 해시맵
     static int parent[];
     static int height[];
     public static void main(String args[]) throws IOException{
@@ -29,7 +29,6 @@ public class Main{
                 if(!map.containsKey(arr[1])){
                     map.put(arr[1], count++);
                 }
-
                 sb.append(union(map.get(arr[0]), map.get(arr[1]))).append("\n");
             }
         }
