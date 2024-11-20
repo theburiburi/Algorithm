@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class 28707 {
     static int N, M;
     static int[] prob, ans;
     static List<Node>[] list;
