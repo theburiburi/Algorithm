@@ -2,7 +2,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.util.*;
 
-public class Main {//1914 dfs
+public class 1914 {//1914 dfs
     static BufferedWriter bw;
     public static void main(String args[]) throws IOException { //1943
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
