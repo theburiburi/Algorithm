@@ -2,94 +2,73 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static class Node implements Comparable<Node>{
-        int deadline;
-        int ramenNum;
-        public Node(int deadline, int ramenNum){
-            this.deadline = deadline;
-            this.ramenNum = ramenNum;
-        }
+    static class Node {
+        int coin;
+        int count;
 
-        @Override
-        public int compareTo(Node o){
-            if(deadline == o.deadline){
-                return o.ramenNum - this.ramenNum;
-            }
-            else{
-                return this.deadline - o.deadline;
-            }
+        public Node(int coin, int count) {
+            this.coin = coin;
+            this.count = count;
         }
-
     }
 
-    static int N;
-    static int deadMax = 0;
-    static List<Integer> list[];
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) throws IOException { //1943
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
+        
+        for (int i = 0; i < 3; i++) {
+            List<Node> list = new ArrayList<>();
+            int N = Integer.parseInt(br.readLine());
+            int total = 0;
+            boolean check = true;
+            boolean dp[] = new boolean[50001];
 
-        N = Integer.parseInt(br.readLine());
-        list = new ArrayList[N+1];
-        for(int i=1; i<=N; i++){
-            list[i] = new ArrayList<>();
-        }
-
-        for(int i=1; i<=N; i++){
+            for (int j = 0; j < N; j++) {
             st = new StringTokenizer(br.readLine());
-            int dead = Integer.parseInt(st.nextToken());
-            int ramen = Integer.parseInt(st.nextToken());
-            deadMax = Math.max(dead, deadMax);
-            list[dead].add(ramen);
-        }
+                int coin = Integer.parseInt(st.nextToken());
+                int count = Integer.parseInt(st.nextToken());
+                list.add(new Node(coin, count));
+                total += coin * count;
 
-        for(int i=1; i<=N; i++){
-            list[i].sort((s1, s2) -> s2 - s1);
-        }   
-        solution();
-    }
-    static void solution(){
-        Queue<Node> que = new LinkedList<>();
+                if(count%2 == 1){
+                    check = false; //모두 짝수이면 나누기 가능
+                }
+            }
 
-        int time = 0;
-        int total = 0;
-
-        que.add(new Node(0, 0));
-        while(!que.isEmpty()){
-            Node now = que.poll();
-            if(now.deadline < time){ //없어도 됨?
+            if (total % 2 != 0) {
+                bw.write("0\n");
+                continue;
+            }
+            if(check){
+                bw.write("1");
                 continue;
             }
 
-            total += now.ramenNum;
-            time++;
+            int target = total / 2;
+            list.sort((s1, s2) -> s2.coin - s1.coin);
 
-            int rememberDead = -1;
-            int rememberSize = -1;
-            int maxValue = 0;
-            boolean visited = false;
-            int visitIndex = time;
-            for(int i = time; i<=deadMax; i++){ 
-                if(list[i].size() == 0 && visited == false){ 
-                    visitIndex = i+1; // 4, 5 같은 시작부터 비어있는 곳 빼고 6부터 찾기위해 쓰는 변수
+            dp[0] = true;
+            for (Node now : list) {
+                for(int j=target; j>=0; j--){
+                    if(dp[j]==true){
+                        for(int k=1; k<=now.count; k++){
+                            if(j+k*now.count < 50001){
+                                dp[j+k*now.coin] = true;
+                            }
+                        }
+                    }
+                    if(dp[target]==true) break;
                 }
-                else if(list[i].size()>(i-visitIndex)){
-                    visited = true;
-                    if(maxValue < list[i].get(i-visitIndex)){
-                        rememberDead = i;
-                        maxValue = list[i].get((i-visitIndex));
-                        rememberSize = (i-visitIndex);
-                    }                    
-                }
-            }
-            if(rememberDead != -1){
-                for(int i=0; i<=rememberSize; i++){
-                    que.add(new Node(rememberDead, list[rememberDead].get(0)));
-                    list[rememberDead].remove(0);
-                }
+                if(dp[target]==true) break;
             }
 
+            if (dp[target]==true) {
+                bw.write("1\n");
+            } else {
+                bw.write("0\n");
+            }
         }
-        System.out.println(total);
+        bw.flush();
     }
 }

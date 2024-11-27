@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class 17825 {
+public class 17825 { //백트래킹 같은 점수가 있어서 수정필요한데 단순 작업이라 안 함
 
     static class Node {
         int scoreNumber;
