@@ -1,31 +1,38 @@
 import java.io.*;
-import java.math.BigInteger;
 import java.util.*;
 
-public class Main {//1914 dfs
-    static BufferedWriter bw;
-    public static void main(String args[]) throws IOException { //1943
+public class 11066 {//자바 dp
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        
-        int N = Integer.parseInt(br.readLine());
-        // BigInteger bigNumber1 = new BigInteger("2");
-        // BigInteger bigNumber2 = new BigInteger("1");
-        // bw.write(bigNumber1.pow(N).subtract(bigNumber2).toString());
-        bw.write(BigInteger.TWO.pow(N).subtract(BigInteger.ONE).toString());
-        bw.newLine();
-        if(N <= 20){
-            hanoi(N, 1, 2, 3);
+        StringBuilder sb = new StringBuilder();
+        int T = Integer.parseInt(br.readLine());
+
+        for (int t = 0; t < T; t++) {
+            int K = Integer.parseInt(br.readLine());
+            int[] arr = new int[K + 1];
+            int[][] dp = new int[K + 1][K + 1];
+            int[] prefixSum = new int[K + 1];
+
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for (int i = 1; i <= K; i++) {
+                arr[i] = Integer.parseInt(st.nextToken());
+                prefixSum[i] = prefixSum[i - 1] + arr[i];
+            }
+
+            for (int len = 2; len <= K; len++) {
+                for (int i = 1; i + len - 1 <= K; i++) {
+                    int j = i + len - 1;
+                    dp[i][j] = Integer.MAX_VALUE;
+
+                    for (int k = i; k < j; k++) {
+                        dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k + 1][j] + prefixSum[j] - prefixSum[i - 1]);
+                    }
+                }
+            }
+
+            sb.append(dp[1][K]).append("\n");
         }
-        bw.flush();
-    }
-    static void hanoi(int N, int from, int temp, int to) throws IOException{
-        if(N ==1) {
-            bw.write(from + " " + to + "\n");
-            return;
-        }
-        hanoi(N-1, from, to, temp);
-        bw.write(from + " " + to + "\n");
-        hanoi(N-1, temp, from, to);
+
+        System.out.print(sb.toString());
     }
 }
