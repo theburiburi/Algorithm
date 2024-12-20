@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main { //22252 해쉬,우선순위큐
+public class 22252 { //22252 해쉬,우선순위큐
     static int Q;
     static HashMap<String, PriorityQueue<Integer>> map = new HashMap<>();
 
