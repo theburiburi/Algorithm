@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {//16637
+public class 16637 {//16637 완전탐색
     static int N;
     static int max = Integer.MIN_VALUE;
     static List<Character> operator = new ArrayList<>();
