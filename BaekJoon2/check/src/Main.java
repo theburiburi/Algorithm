@@ -1,54 +1,34 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {//16637
-    static int N;
-    static int max = Integer.MIN_VALUE;
-    static List<Character> operator = new ArrayList<>();
-    static List<Integer> number = new ArrayList<>();
+public class Main {//
         public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
+        StringBuilder sb = new StringBuilder();
 
-        String sen = br.readLine();
-        for(int i=0; i<N; i++){
-            char temp = sen.charAt(i);
-            if(temp == '+' || temp == '-' || temp =='*'){
-                operator.add(temp);
+        int T = Integer.parseInt(br.readLine());
+        for(int i=0; i<T; i++){
+            int N = Integer.parseInt(br.readLine());
+            int coin[] = new int[N];
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for(int j=0; j<N; j++){
+                coin[j] = Integer.parseInt(st.nextToken());
             }
-            else{
-                number.add(temp-'0');
+            int prob = Integer.parseInt(br.readLine());
+            int dp[] = new int[prob+1];
+
+            dp[0] = 1;
+            for(int j=0; j<coin.length; j++){
+                for(int k=1; k<=prob; k++){
+                    int temp = k - coin[j];
+                    
+                    if(temp >= 0){
+                        dp[k] += dp[temp];
+                    }
+                }
             }
+            sb.append(dp[prob]).append("\n");
         }
-
-        dfs(number.get(0) , 0);
-        System.out.println(max);
-    }
-    static void dfs(int total, int operIndex){
-        
-        if(operIndex >= operator.size()){
-            max = Math.max(max, total);
-            return;
-        }
-        int noParent = calculate(operator.get(operIndex), total, number.get(operIndex+1));
-        dfs(noParent, operIndex+1);
-
-        if(operIndex+1 < operator.size()){
-            int parent = calculate(operator.get(operIndex + 1), number.get(operIndex + 1), number.get(operIndex + 2));
-            int newTotal = calculate(operator.get(operIndex), total, parent);
-            dfs(newTotal, operIndex+2);
-        }        
-    }
-    static int calculate(char form, int x, int y){
-        switch(form){
-            case '+':
-                return x+y;
-            case '-':
-                return x-y;
-            case '*':
-                return x*y;
-            default:
-                return -1;
-        }
+        System.out.println(sb);
     }
 }
