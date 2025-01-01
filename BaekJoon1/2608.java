@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class 2608 {//2608 String
     static char roma[] = {'I','V','X','L','C','D','M'};
     static int romaInt[] = {1,5,10,50,100,500,1000};
     static int stringToInt[] = {1000,900,500,400,100,90,50,40,10,9,5,4,1};
