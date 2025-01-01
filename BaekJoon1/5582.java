@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {//2565 dp
+public class 5582 {//5582 String, dp
         public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sen1 = br.readLine();
