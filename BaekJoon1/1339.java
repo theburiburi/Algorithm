@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {//1339 그리디
+public class 1339 {//1339 그리디
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
