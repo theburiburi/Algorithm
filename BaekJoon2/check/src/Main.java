@@ -1,73 +1,62 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {//1774 그리디
-    public static void main(String[] args) throws IOException {
+public class Main { //3109 그래프
+    static int dx[] = {1,1,1};
+    static int dy[] = {-1,0,1};
+    static int R,C;
+
+    static boolean visited[][];
+    static char arr[][];
+
+    static int ans = 0;
+    static boolean flag;
+    public static void main(String args[]) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        List<Integer> negList = new ArrayList<>();
-        List<Integer> posList = new ArrayList<>();
-        
-        for(int i=0; i<N; i++){
-            int temp = Integer.parseInt(br.readLine());
-            if(temp > 0){
-                posList.add(temp);
-            }
-            else{
-                negList.add(temp);
-            }
-        }
-        posList.sort((s1,s2) -> s2-s1);
-        negList.sort((s1,s2) -> s1-s2);
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int posLen = posList.size();
-        int negLen = negList.size();
+        R = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
 
-        int sum=0;
-        if(posLen == 1 && negLen == 1){
-            if(posList.get(0)*negList.get(0)> posList.get(0)+negList.get(0)){
-                sum += posList.get(0)*negList.get(0);
+        visited = new boolean[R][C];
+        arr = new char[R][C];
+        for(int i = 0; i<R; i++){
+            String temp = br.readLine();
+            for(int j=0; j<C; j++){
+                arr[i][j] = temp.charAt(j);
             }
-            else sum += posList.get(0)+negList.get(0);
-        }
-        else if (posLen == 1){
-            sum += posList.get(0);
-        }
-        else if (negLen == 1){
-            sum += negList.get(0);
         }
 
-        for(int j=0; j<posLen-1; j++){
-            if(posList.get(j) * posList.get(j+1) > posList.get(j) + posList.get(j+1)){
-                sum += posList.get(j) * posList.get(j+1);
-                j++;
-                if(j==posLen-2){
-                    sum += posList.get(j+1);
-                }
-            }
-            else{
-                sum += posList.get(j);
-                if(j==posLen-2){
-                    sum += posList.get(j+1);
+        for(int i=0; i<R; i++){
+            flag = false;
+            dfs(i,0);
+        }
+        System.out.println(ans);
+    }
+    static void dfs(int r, int c){
+        if(c==C-1) {
+            ans++;
+            flag = true;
+            visited[r][c] = true;
+            return;
+        }
+        for(int i=0; i<3; i++){
+            int newR = r+dy[i];
+            int newC = c+dx[i];
+            if(check(newR,newC) && !visited[newR][newC] && arr[newR][newC] == '.'){
+                dfs(newR,newC);
+                visited[r][c] = true;
+                if(flag){
+                    return;
                 }
             }
         }
-        for(int j=0; j<negLen-1; j++){
-            if(negList.get(j) * negList.get(j+1) > negList.get(j) + negList.get(j+1)){
-                sum += negList.get(j) * negList.get(j+1);
-                j++;
-                if(j==posLen-2){
-                    sum += posList.get(j+1);
-                }
-            }
-            else{
-                sum += negList.get(j);
-                if(j==posLen-2){
-                    sum += negList.get(j+1);
-                }
-            }
+    }
+
+    static boolean check(int r, int c){
+        if (r<0 || r>=R || c<0 || c>=C){
+            return false;
         }
-            
-        System.out.println(sum);
+        return true;
     }
 }
