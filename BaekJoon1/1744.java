@@ -33,7 +33,8 @@ public class 1744 { //1744 그리디
         for (int i = 0; i < negList.size(); i += 2) {
             if (i + 1 < negList.size()) {
                 sum += negList.get(i) * negList.get(i + 1);
-            } else {
+            } 
+            else {
                 sum += negList.get(i);
             }
         }
