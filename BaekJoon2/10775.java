@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main { //10775 그리디
+public class 10775 { //10775 그리디
     static int N,M;
     static class Node implements Comparable<Node>{
         int mini;
