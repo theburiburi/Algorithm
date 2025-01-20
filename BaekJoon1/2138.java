@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main { //2138 그리디
+public class 2138 { //2138 그리디
     static int end[];
     static int N;
     public static void main(String args[]) throws IOException {
