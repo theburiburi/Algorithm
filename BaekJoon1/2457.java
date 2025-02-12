@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main { //2457 그리디
+public class 2457 { //2457 그리디
     static int N;
     public static void main(String args[]) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -23,19 +23,19 @@ public class Main { //2457 그리디
         int threshold = 301; //3M1D
         int ans = 0;
         int index = 0;
-        while(threshold < 1130){
-            boolean check = false;
+        while(threshold < 1201){ //1130이면 꽃이 진다.
+            boolean found = false;
             int maxDay = threshold;
             for(; index<list.size(); index++){
                 int temp[] = list.get(index);
 
-                if (temp[0] <= threshold){
-                    maxDay = Math.max(temp[1], maxDay);
-                    check = true;
+                if (temp[0] > threshold) break;
+                if (temp[1] > maxDay){
+                    maxDay = temp[1];
+                    found = true;
                 }
-                else break;
             }
-            if(!check){
+            if(!found){
                 ans = 0;
                 break;
             }
