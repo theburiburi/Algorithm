@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main { //14267 트리
+public class 14267 { //14267 트리
     static List<Integer> list[];
     static int praises[];
     public static void main(String args[]) throws IOException {
