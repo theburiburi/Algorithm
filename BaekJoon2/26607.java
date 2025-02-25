@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main { //26607 dp
+public class 26607 { //26607 dp
     static int n, k, x;
     static int ans = 0;
     static boolean dp[][];
