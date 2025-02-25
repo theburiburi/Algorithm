@@ -34,10 +34,10 @@ public class 13904 { //13904 그리디
                 pq.poll();
             }
         }
-        int ans = 0;
+        int sol = 0;
         while(!pq.isEmpty()){
-            ans += pq.poll();
+            sol += pq.poll();
         }
-        System.out.println(ans);
+        System.out.println(sol);
     }
 }
