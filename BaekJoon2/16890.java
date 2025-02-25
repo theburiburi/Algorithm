@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Main { //16890 string
+public class 16890 { //16890 string
     public static void main(String args[]) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
@@ -18,7 +18,7 @@ public class Main { //16890 string
         Arrays.sort(second);
         for(int i=0; i<n; i++){
             if(i%2 == 0){ //사과 차례
-                if(first[firstLeft] > second[secondRight]){
+                if(first[firstLeft] >= second[secondRight]){
                     ans[ansRight--] = first[firstRight--]; 
                 }
                 else{
@@ -26,7 +26,7 @@ public class Main { //16890 string
                 }
             }
             else{ //큐브 차례
-                if(first[firstLeft] > second[secondRight]){
+                if(first[firstLeft] >= second[secondRight]){
                     ans[ansRight--] = second[secondLeft++];
                 }
                 else{
