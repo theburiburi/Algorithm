@@ -1,44 +1,66 @@
 import java.io.*;
 import java.util.*;
 
-public class Main { //16890 string
+public class Main { //8980 그리디
+    static class Node implements Comparable<Node>{
+        int start;
+        int end;
+        int box;
+        public Node(int start, int end, int box){
+            this.start = start;
+            this.end = end;
+            this.box = box;
+        }
+        @Override
+        public int compareTo(Node o){
+            if(end == o.end) return start - o.start;
+            return end - o.end;
+        }
+    }
     public static void main(String args[]) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        char first[] = br.readLine().toCharArray();
-        char second[] = br.readLine().toCharArray();
-        
-        int n = first.length;
-        int firstLeft = 0, firstRight = n/2 + n%2 -1;
-        int secondLeft = firstRight+1, secondRight = n-1;
-        
-        char ans[] = new char[n];
-        int ansLeft = 0, ansRight = n-1;
-        Arrays.sort(first);
-        Arrays.sort(second);
-        for(int i=0; i<n; i++){
-            if(i%2 == 0){ //사과 차례
-                if(first[firstLeft] > second[secondRight]){
-                    ans[ansRight--] = first[firstRight--]; 
-                }
-                else{
-                    ans[ansLeft++] = first[firstLeft++];
-                }
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int N = Integer.parseInt(st.nextToken());
+        int C = Integer.parseInt(st.nextToken());
+        st = new StringTokenizer(br.readLine());
+        int M = Integer.parseInt(st.nextToken());
+        Node node[] = new Node[M];
+        int contain[] = new int[N+1];
+        for(int i=0; i<M; i++){
+            st = new StringTokenizer(br.readLine());
+            int n = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
+            int m = Integer.parseInt(st.nextToken());
+            node[i] = new Node(n,c,m);
+        }
+        for(int i=1; i<=N; i++){
+            contain[i] = C;
+        }
+
+        Arrays.sort(node);
+        int ans = 0;
+        for(int i=0; i<M; i++){
+            Node now = node[i];
+            int maxBox = Integer.MAX_VALUE;
+            for(int j=now.start; j<now.end; j++){ //최대 적재량 찾기
+                maxBox = Math.min(maxBox, contain[j]);
             }
-            else{ //큐브 차례
-                if(first[firstLeft] > second[secondRight]){
-                    ans[ansRight--] = second[secondLeft++];
+            
+            if(now.box <= maxBox){
+                for(int j=now.start; j<now.end; j++){
+                    contain[j] -= now.box;
                 }
-                else{
-                    ans[ansLeft++] = second[secondRight--];
+                ans += now.box;
+            }
+            else{
+                for(int j=now.start; j<now.end; j++){
+                    contain[j] -= maxBox;
                 }
+                ans += maxBox;
             }
         }
-        
-        for(int i=0; i<n; i++){
-            sb.append(ans[i]);
-        }
-        System.out.println(sb.toString());
-    
+        System.out.println(ans);
+
     }
 }
