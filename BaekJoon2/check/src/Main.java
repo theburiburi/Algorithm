@@ -1,66 +1,45 @@
 import java.io.*;
 import java.util.*;
 
-public class Main { //8980 그리디
-    static class Node implements Comparable<Node>{
-        int start;
-        int end;
-        int box;
-        public Node(int start, int end, int box){
-            this.start = start;
-            this.end = end;
-            this.box = box;
-        }
-        @Override
-        public int compareTo(Node o){
-            if(end == o.end) return start - o.start;
-            return end - o.end;
-        }
-    }
+public class Main {
+    static List<Integer> tree[];
+    static int dp[];
     public static void main(String args[]) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringTokenizer st;
 
-        int N = Integer.parseInt(st.nextToken());
-        int C = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(br.readLine());
         st = new StringTokenizer(br.readLine());
-        int M = Integer.parseInt(st.nextToken());
-        Node node[] = new Node[M];
-        int contain[] = new int[N+1];
-        for(int i=0; i<M; i++){
-            st = new StringTokenizer(br.readLine());
-            int n = Integer.parseInt(st.nextToken());
-            int c = Integer.parseInt(st.nextToken());
-            int m = Integer.parseInt(st.nextToken());
-            node[i] = new Node(n,c,m);
-        }
-        for(int i=1; i<=N; i++){
-            contain[i] = C;
-        }
 
-        Arrays.sort(node);
-        int ans = 0;
-        for(int i=0; i<M; i++){
-            Node now = node[i];
-            int maxBox = Integer.MAX_VALUE;
-            for(int j=now.start; j<now.end; j++){ //최대 적재량 찾기
-                maxBox = Math.min(maxBox, contain[j]);
-            }
-            
-            if(now.box <= maxBox){
-                for(int j=now.start; j<now.end; j++){
-                    contain[j] -= now.box;
-                }
-                ans += now.box;
+        tree = new ArrayList[N];
+        dp = new int[N];
+        int root = 0;
+
+        for(int i=0; i<N; i++){
+            tree[i] = new ArrayList<>();
+            int temp = Integer.parseInt(st.nextToken());
+            if (temp != -1){
+                tree[temp].add(i);
             }
             else{
-                for(int j=now.start; j<now.end; j++){
-                    contain[j] -= maxBox;
-                }
-                ans += maxBox;
+                root = i;
             }
         }
+        int ans = solve(root);
         System.out.println(ans);
-
+    }
+    
+    static public int solve(int now){
+        for(int next : tree[now]){
+            dp[next] = 1 + solve(next);
+        }
+        tree[now].sort((s1,s2)-> s2-s1);
+        int num = 0;
+        for(int i=0; i<tree[now].size(); i++){
+            int next = tree[now].get(i);
+            dp[next] += i;
+            num = Math.max(num, dp[next]);
+        }
+        return num;
     }
 }
