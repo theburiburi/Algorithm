@@ -1,77 +1,52 @@
 import java.io.*;
 import java.util.*;
 
-public class Main { //23059 해쉬셋
-    static Map<String, ArrayList<String>> connection = new HashMap<>();
-    static Map<String, Integer> inDegree = new HashMap<>();
-    static StringBuilder sb = new StringBuilder();
+public class Main { //19700 해시
+    static Map<Integer, Integer> map = new HashMap<>();
+    static Node list[];
     public static void main(String args[]) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
-
         int N = Integer.parseInt(br.readLine());
+        list = new Node[N];
         for(int i=0; i<N; i++){
-            st = new StringTokenizer(br.readLine(), " ");
-            String prev = st.nextToken();
-            String next = st.nextToken();
+            st = new StringTokenizer(br.readLine());
+            int h = Integer.parseInt(st.nextToken());
+            int k = Integer.parseInt(st.nextToken());
+            list[i] = new Node(h,k);
+        }
+        Arrays.sort(list);
 
-            if(connection.get(prev) == null){
-                connection.put(prev, new ArrayList<>());
-                inDegree.put(prev, 0);
+        TreeSet<Integer> ts = new TreeSet<>();
+        int group[] = new int[N+1];
+        group[0] = N;
+        for(Node now : list){
+            Integer find = ts.lower(now.k);
+            find = find == null ? 0 : find;
+            if(--group[find] == 0){
+                ts.remove(find);
             }
-            if(inDegree.get(next) == null){
-                connection.put(next, new ArrayList<>());
-                inDegree.put(next, 0);
-            }
-
-            connection.get(prev).add(next);
-            inDegree.put(next, inDegree.get(next)+1);
+            group[find+1]++;
+            ts.add(find+1);
         }
 
-        solution();
-        boolean flag = true;
-        for(String key : inDegree.keySet()){
-            if(inDegree.get(key) != 0){
-                flag = false;
-                break;
-            }
+        int ans = 0;
+        for(int i=1; i<=N; i++){
+            ans += group[i];
         }
-        System.out.println(flag == true ? sb.toString() : "-1");
+        System.out.println(ans);
+
     }
-    static private void solution(){
-        ArrayList<String> zeroInDegree = new ArrayList<>();
-        Queue<String> que = new LinkedList<>();
-
-        for(String key : inDegree.keySet()){
-            if(inDegree.get(key) == 0){
-                zeroInDegree.add(key);
-            }
+    static class Node implements Comparable<Node>{
+        int h;
+        int k;
+        public Node(int h, int k){
+            this.h = h;
+            this.k = k;
         }
-        zeroInDegree.sort((s1,s2)-> s1.compareTo(s2));
-
-        for(String key : zeroInDegree){
-            que.add(key);
-        }
-
-        while(!que.isEmpty()){
-            int size = que.size();
-            zeroInDegree = new ArrayList<>();
-
-            for(int i=0; i<size; i++){
-                String now = que.poll();
-                sb.append(now+"\n");
-
-                for(String next : connection.get(now)){
-                    inDegree.put(next, inDegree.get(next) - 1);
-                    if(inDegree.get(next) == 0){
-                        zeroInDegree.add(next);
-                    }
-                }
-            }
-            zeroInDegree.sort((s1,s2)->s1.compareTo(s2));
-            for(String key : zeroInDegree){
-                que.add(key);
-            }
+        @Override
+        public int compareTo(Node o){
+            return o.h - h;
         }
     }
 }
