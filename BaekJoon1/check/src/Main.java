@@ -1,83 +1,71 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
-    static class Point {
-        int x, y;
-        public Point(int x, int y) {
+public class Main { //1933 treeset
+    static class Building implements Comparable<Building>{
+        int x, h;
+
+        Building(int x, int h) {
             this.x = x;
-            this.y = y;
+            this.h = h;
         }
 
         @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Point)) return false;
-            Point p = (Point) o;
-            return x == p.x && y == p.y;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(x, y);
+        public int compareTo(Building o){
+            if(x == o.x){
+                return o.h - h;
+            }
+            return x - o.x;
         }
     }
-
-    public static void main(String[] args) throws IOException {
+    
+    public static void main(String[] args) throws IOException { 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        int N = Integer.parseInt(br.readLine());
+
+        PriorityQueue<Building> pq = new PriorityQueue<>();
         StringBuilder sb = new StringBuilder();
-        StringTokenizer st;
 
-        int T = Integer.parseInt(br.readLine());
+        for (int i = 0; i < N; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int l = Integer.parseInt(st.nextToken());
+            int h = Integer.parseInt(st.nextToken());
+            int r = Integer.parseInt(st.nextToken());
+            pq.offer(new Building(l, h));
+            pq.offer(new Building(r, -h));
+        }
 
-        while (T-- > 0) {
-            int N = Integer.parseInt(br.readLine());
-            Point[] points = new Point[N];
-            HashSet<Point> pointsSet = new HashSet<>();
-            int ans = 0;
+        TreeMap<Integer, Integer> map = new TreeMap<>(Collections.reverseOrder());
+        int currentX = 0, currentH = 0;
+        map.put(0, 1);
 
-            for (int i = 0; i < N; i++) {
-                st = new StringTokenizer(br.readLine());
-                int x = Integer.parseInt(st.nextToken());
-                int y = Integer.parseInt(st.nextToken());
-                points[i] = new Point(x, y);
-                pointsSet.add(points[i]);
-            }
+        while (!pq.isEmpty()) {
+            Building b = pq.poll();
 
-            for (int i = 0; i < N; i++) {
-                for (int j = i + 1; j < N; j++) {
-                    Point p1 = points[i];
-                    Point p2 = points[j];
-
-                    int dx = p2.x - p1.x;
-                    int dy = p2.y - p1.y;
-                    int len = dx * dx + dy * dy;
-
-                    // 90도 회전한 정사각형 확인
-                    int x3 = p1.x - dy;
-                    int y3 = p1.y + dx;
-                    int x4 = p2.x - dy;
-                    int y4 = p2.y + dx;
-
-                    if (pointsSet.contains(new Point(x3, y3)) && pointsSet.contains(new Point(x4, y4))) {
-                        ans = Math.max(ans, len);
-                    }
-
-                    // 반대 방향 90도 회전도 확인
-                    int x5 = p1.x + dy;
-                    int y5 = p1.y - dx;
-                    int x6 = p2.x + dy;
-                    int y6 = p2.y - dx;
-
-                    if (pointsSet.contains(new Point(x5, y5)) && pointsSet.contains(new Point(x6, y6))) {
-                        ans = Math.max(ans, len);
-                    }
+            if (b.h > 0) {
+                map.put(b.h, map.getOrDefault(b.h, 0) + 1);
+            } 
+            else {
+                int val = map.get(-b.h);
+                if (val == 1) {
+                    map.remove(-b.h);
+                } 
+                else {
+                    map.put(-b.h, val - 1); //replace
                 }
             }
 
-            sb.append(ans).append("\n");
+            // maxX ~ b.x 중 가장 높은 H를 뽑음
+            int height = map.firstKey();
+            if (currentX != b.x && currentH != height) {
+                sb.append(b.x+" ").append(height+" ");
+                currentX = b.x;
+                currentH = height;
+            }
         }
 
-        System.out.print(sb);
+        System.out.print(sb.toString());
     }
 }
+
