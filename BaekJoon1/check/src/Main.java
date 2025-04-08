@@ -1,71 +1,59 @@
 import java.io.*;
 import java.util.*;
 
-public class Main { //1933 treeset
-    static class Building implements Comparable<Building>{
-        int x, h;
-
-        Building(int x, int h) {
-            this.x = x;
-            this.h = h;
-        }
-
-        @Override
-        public int compareTo(Building o){
-            if(x == o.x){
-                return o.h - h;
-            }
-            return x - o.x;
-        }
-    }
-    
+public class Main { //2287 treeset
+    static int K;
+    static int arr[];
+    static HashSet<Integer> dp[] = new HashSet[9];
     public static void main(String[] args) throws IOException { 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        int N = Integer.parseInt(br.readLine());
-
-        PriorityQueue<Building> pq = new PriorityQueue<>();
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < N; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int l = Integer.parseInt(st.nextToken());
-            int h = Integer.parseInt(st.nextToken());
-            int r = Integer.parseInt(st.nextToken());
-            pq.offer(new Building(l, h));
-            pq.offer(new Building(r, -h));
+        K = Integer.parseInt(br.readLine());
+        int n = Integer.parseInt(br.readLine());
+        arr = new int[n];
+        for(int i=0; i<n; i++){
+            int num = Integer.parseInt(br.readLine());
+            arr[i] = num;
         }
+        int num = 0;
 
-        TreeMap<Integer, Integer> map = new TreeMap<>(Collections.reverseOrder());
-        int currentX = 0, currentH = 0;
-        map.put(0, 1);
-
-        while (!pq.isEmpty()) {
-            Building b = pq.poll();
-
-            if (b.h > 0) {
-                map.put(b.h, map.getOrDefault(b.h, 0) + 1);
-            } 
-            else {
-                int val = map.get(-b.h);
-                if (val == 1) {
-                    map.remove(-b.h);
-                } 
-                else {
-                    map.put(-b.h, val - 1); //replace
+        for(int i=1; i<=8; i++){
+            dp[i] = new HashSet<>();
+            num = num*10 + K;
+            dp[i].add(num);
+        }
+        solution();
+        
+        for(int i=0; i<n; i++){
+            int ans = 0;
+            for(int j=1; j<=8; j++){
+                if(dp[j].contains(arr[i])){
+                    ans = j;
+                    break;
                 }
             }
-
-            // maxX ~ b.x 중 가장 높은 H를 뽑음
-            int height = map.firstKey();
-            if (currentX != b.x && currentH != height) {
-                sb.append(b.x+" ").append(height+" ");
-                currentX = b.x;
-                currentH = height;
+            sb.append(ans == 0 ? "NO" : ans + "\n");
+        }
+        System.out.print(sb.toString().trim());
+    }
+    public static void solution(){
+        for(int i=1; i<=8; i++){
+            for(int j=1; j<=i/2; j++){
+                int idx = i-j;
+                for(int a : dp[j]){
+                    for(int b : dp[idx]){
+                        dp[i].add(a+b);
+                        dp[i].add(a-b);
+                        dp[i].add(b-a);
+                        dp[i].add(a*b);
+    
+                        if(a!=0){dp[i].add(b/a);}
+                        if(b!=0){dp[i].add(a/b);}
+                    }
+                }
             }
         }
-
-        System.out.print(sb.toString());
     }
 }
 
