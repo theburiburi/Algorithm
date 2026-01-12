@@ -3,10 +3,8 @@ import java.util.*;
 
 public class 16719 { //16719
     static int N;
-    static String answer = "";
     static String str = "";
     static boolean check[];
-    static int count = 0;
     static StringBuilder sb;
     public static void main(String args[]) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
