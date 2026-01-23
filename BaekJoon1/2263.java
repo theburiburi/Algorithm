@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 
-public class 2263 { //2263
+public class 2263 { //2263 tree divide and conquer
     static int inOrder[];
     static int postOrder[];
     static int inIdx[];
