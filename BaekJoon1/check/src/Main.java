@@ -1,79 +1,42 @@
 import java.io.*;
 import java.util.*;
 
-public class Main { // 16402 string union-find
-    static int king[];
-    public static void main(String args[]) throws Exception {
+public class Main { // 10868 Segment Tree
+    public static void main(String args[]) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
+        StringTokenizer st = new StringTokenizer(br.readLine());
         StringBuilder sb = new StringBuilder();
 
-        st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
 
-        Map<String, Integer> map = new HashMap<>();
-        king = new int[N];
-        String kingdomName[] = new String[N];
-        for (int i = 0; i < N; i++) {
-            String str = br.readLine();
-            kingdomName[i] = cutString(str);
-            map.put(kingdomName[i], i);
-            king[i] = i;
+        int size = 1; //리프 노드 갯수
+        while(size < N) size *= 2;
+        int tree[] = new int[size*2];
+
+        for(int i=0; i<size; i++){
+            if(i < N) tree[size+i] = Integer.parseInt(br.readLine());
+            else tree[size+i] = Integer.MAX_VALUE;
         }
 
-        for (int i = 0; i < M; i++) {
-            String str[] = br.readLine().split(",");
-            
-            int leftIdx = map.get(cutString(str[0]));
-            int rightIdx = map.get(cutString(str[1]));
-            int win = Integer.parseInt(str[2]);
-
-            int leftKingdom = find(leftIdx);
-            int rightKingdom = find(rightIdx);
-
-            if(leftKingdom == rightKingdom){ // 속국과의 싸움
-                if(leftKingdom == leftIdx){ // 왼쪽이 대빵
-                    if(win == 2){ // 오른쪽이 이김
-                        king[rightIdx] = rightIdx;
-                        king[leftIdx] = rightIdx;
-                    }
-                }
-                else{ // 오른쪽이 대빵
-                    if(win == 1){ // 왼쪽이 이김
-                        king[leftIdx] = leftIdx;
-                        king[rightIdx] = leftIdx;
-                    }
-                }
-            }
-            else{
-                if (win == 1) { king[rightKingdom] = leftKingdom; }
-                else{ king[leftKingdom] = rightKingdom; }
-            }
+        for(int i=size-1; i > 0; i--){
+            tree[i] = Math.min(tree[i*2], tree[i*2+1]);
         }
 
-        Set<String> resultSet = new TreeSet<>(); 
-        for (int i = 0; i < N; i++) {
-            if (i == king[i]) {
-                resultSet.add(kingdomName[i]);
-            }
-        }
+        for(int i=0; i<M; i++){
+            st = new StringTokenizer(br.readLine());
+            int left = Integer.parseInt(st.nextToken()) + size - 1;
+            int right = Integer.parseInt(st.nextToken()) + size - 1;
 
-        sb.append(resultSet.size()).append("\n");
-        for (String now : resultSet) {
-            sb.append("Kingdom of ").append(now).append("\n");
+            int answer = Integer.MAX_VALUE;
+            while(left <= right){
+                if(left % 2 == 1) answer = Math.min(answer, tree[left++]);
+                if(right % 2 == 0) answer = Math.min(answer, tree[right--]);
+                left /= 2;
+                right /= 2;
+            }
+            sb.append(answer+"\n");
         }
         System.out.println(sb);
     }
-
-    public static String cutString(String str) {
-        String prefix = "Kingdom of ";
-        return str.substring(prefix.length());
-    }
-
-    public static int find(int x){
-        if(x == king[x]) return x;
-        else{ return find(king[x]); }
-    }
-
 }
