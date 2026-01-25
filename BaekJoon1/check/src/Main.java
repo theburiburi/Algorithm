@@ -2,49 +2,55 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int tree[];
-    static int arr[];
     public static void main(String args[]) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringTokenizer st;
 
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        int size = 1;
-
-        while(size < N) size *= 2;
-
-        arr = new int[N+1];
-        tree = new int[size*2];
-        for(int i=1; i<=N; i++){
-            arr[i] = Integer.parseInt(br.readLine());
-        }
-
-        setting(1, 1, N);
-        for(int i=0; i<M; i++){
+        int T = Integer.parseInt(br.readLine());
+        while(T --> 0){
             st = new StringTokenizer(br.readLine());
-            int left = Integer.parseInt(st.nextToken());
-            int right = Integer.parseInt(st.nextToken());
+            int N = Integer.parseInt(st.nextToken());
+            int K = Integer.parseInt(st.nextToken());
 
-            sb.append(find(1, 1, N, left, right) + "\n");
+            int time[] = new int[N+1];
+            int totalTime[] = new int[N+1];
+            List<Integer> list[] = new ArrayList[N+1];
+            st = new StringTokenizer(br.readLine());
+            for(int i=1; i<=N; i++){
+                time[i] = Integer.parseInt(st.nextToken());
+                list[i] = new ArrayList<>();
+            }
+
+            int degree[] = new int[N+1];
+            for(int i=1; i<=K; i++) {
+                st = new StringTokenizer(br.readLine());
+                int left = Integer.parseInt(st.nextToken());
+                int right = Integer.parseInt(st.nextToken());
+                list[left].add(right);
+                degree[right]++;
+            }
+            int target = Integer.parseInt(br.readLine());
+
+            Queue<Integer> que = new LinkedList<>();
+            for(int i=1; i<=N; i++){
+                if(degree[i] == 0){
+                    que.add(i);
+                    totalTime[i] = time[i];
+                }
+            }
+
+            while(!que.isEmpty()){
+                int now = que.poll();
+                if(now == target) break;
+                for(int next : list[now]){
+                    totalTime[next] = Math.max(totalTime[next], totalTime[now] + time[next]);
+                    degree[next]--;
+                    if(degree[next] == 0) que.add(next);
+                }
+            }
+            sb.append(totalTime[target]+"\n");
         }
         System.out.println(sb);
-    }
-    private static int setting(int node, int start, int end){
-        if(start == end) return tree[node] = arr[start];
-
-        int mid = (start + end) / 2;
-
-        return tree[node] = Math.min(setting(node*2, start, mid), setting(node*2+1, mid+1, end));
-    }
-
-    private static int find(int node, int start, int end, int left, int right){
-        if(end < left || right < start) return Integer.MAX_VALUE; // 완전 벗어날 때
-
-        if(left <= start && end <= right) return tree[node]; //범위 안 일때
-
-        int mid = (start + end) / 2;
-        return Math.min(find(node*2, start, mid, left, right), find(node*2+1, mid+1, end, left, right)); // 일부분 겹쳐 있을 때
     }
 }
