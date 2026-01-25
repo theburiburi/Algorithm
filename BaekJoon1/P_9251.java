@@ -13,9 +13,9 @@ public class P_9251{//문자?? DP
         
         dp = new Integer[str1.length][str2.length];
 
-        System.out.println()
+        System.out.println();
     }
-    static Integer LCS(int str1Len, int str2Len){
+    // static Integer LCS(int str1Len, int str2Len){
         
-    }
+    // }
 }
