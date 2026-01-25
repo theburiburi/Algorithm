@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class P_1135 { //1135 dp, 그리??
+public class P_1135 { //1135 dp, 그리디
     static List<Integer> tree[];
     static int dp[];
     public static void main(String args[]) throws IOException {
@@ -43,4 +43,3 @@ public class P_1135 { //1135 dp, 그리??
         return num;
     }
 }
-
