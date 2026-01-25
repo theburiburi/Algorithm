@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class 1005 { // Topological sort
+public class 1005 { // Topological sorting
     public static void main(String args[]) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
