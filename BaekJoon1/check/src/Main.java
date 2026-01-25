@@ -1,42 +1,50 @@
 import java.io.*;
 import java.util.*;
 
-public class Main { // 10868 Segment Tree
-    public static void main(String args[]) throws IOException {
+public class Main {
+    static int tree[];
+    static int arr[];
+    public static void main(String args[]) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
         StringBuilder sb = new StringBuilder();
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
+        int size = 1;
 
-        int size = 1; //리프 노드 갯수
         while(size < N) size *= 2;
-        int tree[] = new int[size*2];
 
-        for(int i=0; i<size; i++){
-            if(i < N) tree[size+i] = Integer.parseInt(br.readLine());
-            else tree[size+i] = Integer.MAX_VALUE;
+        arr = new int[N+1];
+        tree = new int[size*2];
+        for(int i=1; i<=N; i++){
+            arr[i] = Integer.parseInt(br.readLine());
         }
 
-        for(int i=size-1; i > 0; i--){
-            tree[i] = Math.min(tree[i*2], tree[i*2+1]);
-        }
-
+        setting(1, 1, N);
         for(int i=0; i<M; i++){
             st = new StringTokenizer(br.readLine());
-            int left = Integer.parseInt(st.nextToken()) + size - 1;
-            int right = Integer.parseInt(st.nextToken()) + size - 1;
+            int left = Integer.parseInt(st.nextToken());
+            int right = Integer.parseInt(st.nextToken());
 
-            int answer = Integer.MAX_VALUE;
-            while(left <= right){
-                if(left % 2 == 1) answer = Math.min(answer, tree[left++]);
-                if(right % 2 == 0) answer = Math.min(answer, tree[right--]);
-                left /= 2;
-                right /= 2;
-            }
-            sb.append(answer+"\n");
+            sb.append(find(1, 1, N, left, right) + "\n");
         }
         System.out.println(sb);
+    }
+    private static int setting(int node, int start, int end){
+        if(start == end) return tree[node] = arr[start];
+
+        int mid = (start + end) / 2;
+
+        return tree[node] = Math.min(setting(node*2, start, mid), setting(node*2+1, mid+1, end));
+    }
+
+    private static int find(int node, int start, int end, int left, int right){
+        if(end < left || right < start) return Integer.MAX_VALUE; // 완전 벗어날 때
+
+        if(left <= start && end <= right) return tree[node]; //범위 안 일때
+
+        int mid = (start + end) / 2;
+        return Math.min(find(node*2, start, mid, left, right), find(node*2+1, mid+1, end, left, right)); // 일부분 겹쳐 있을 때
     }
 }

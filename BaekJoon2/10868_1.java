@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class 10868 { // 10868 Segment Tree
+public class 10868_1 { // 10868 Segment Tree // Bottom-up
     public static void main(String args[]) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
