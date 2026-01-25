@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class 10868_2 { //segment tree
+public class 10868_2 { //segment tree Top-down 방식
     static int tree[];
     static int arr[];
     public static void main(String args[]) throws IOException{
