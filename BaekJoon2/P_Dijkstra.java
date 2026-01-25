@@ -17,7 +17,7 @@ class Node implements Comparable<Node> {
     }
 }
 
-public class Dijkstra {
+public class P_Dijkstra {
 
     static final int INF = 999;
     static final int graph1Size = 6;
@@ -110,4 +110,3 @@ public class Dijkstra {
         System.out.println("]");
     }
 }
-

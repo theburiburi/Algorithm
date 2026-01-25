@@ -22,7 +22,7 @@ public class P_15989{//15989 DP
         //dp9 =    333 3321 
         for(int i=4; i<=T; i++){
             if (i % 3 == 0)
-            dp[i] = 
+            dp[i] = 3;
         }
 
         for(int i=0; i<T; i++){

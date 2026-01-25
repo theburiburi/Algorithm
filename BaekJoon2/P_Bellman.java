@@ -11,7 +11,7 @@ class Node {
     }
 }
 
-public class Bellman {
+public class P_Bellman {
 
     static final int INF = 999;
     static final int graph1Size = 6;
@@ -84,7 +84,7 @@ public class Bellman {
         for (int i = 1; i <= graphSize; i++) {
             if (i == graphSize) {
                 System.out.println();
-                System.out.println("<<<-------- ?�드 " + index + " -------->>>");
+                System.out.println("<<<-------- 노드 " + index + " -------->>>");
                 for (int destination = 1; destination <= graphSize; destination++) {
                     if (destination == index) continue;
                     ArrayList<Integer> path = new ArrayList<>();
@@ -107,4 +107,3 @@ public class Bellman {
         }
     }
 }
-
