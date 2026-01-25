@@ -60,7 +60,7 @@ public class P_1238{ //1238 그래??
             this.cost = cost;
         }
         @Override
-        public int compareTo(Main.Node o) {
+        public int compareTo(Node o) {
             return this.cost - o.cost;
         }
     }

@@ -10,7 +10,7 @@ class Node {
     }
 }
 
-public class Warshall {
+public class P_Warshall {
 
     static final int INF = 999;
     static final int graph1Size = 6;
@@ -66,7 +66,7 @@ public class Warshall {
     }
 
     static void floydWarshall(int graphSize, ArrayList<Node>[] dist) {
-        System.out.println("Floyd ?�행 ??);
+        System.out.println("Floyd 실행 전");
         printGraph(graphSize, dist);
 
         for (int z = 1; z <= graphSize; z++) {
@@ -84,7 +84,7 @@ public class Warshall {
             printGraph(graphSize, dist);
         }
 
-        System.out.println("Floyd ?�행 ??);
+        System.out.println("Floyd 실행 후");
         printGraph(graphSize, dist);
     }
 
@@ -102,4 +102,3 @@ public class Warshall {
         System.out.println();
     }
 }
-
