@@ -1,17 +1,18 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-class Node {
-    int endPoint;
-    int cost;
 
-    Node(int endPoint, int cost) {
-        this.endPoint = endPoint;
-        this.cost = cost;
-    }
-}
 
 public class P_Bellman {
+    static class Node {
+        int endPoint;
+        int cost;
+
+        Node(int endPoint, int cost) {
+            this.endPoint = endPoint;
+            this.cost = cost;
+        }
+    }
 
     static final int INF = 999;
     static final int graph1Size = 6;
