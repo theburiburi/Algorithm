@@ -6,20 +6,20 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
-class Node {
-    int P;
-    int L;
 
-    public Node(int P, int L){
-        this.P = P;
-        this.L = L;
-    }
-}
-
-public class P_21939{ //?�료구조
+public class P_21939{ //?�료구조
     static int N;
     static int M;
     static TreeSet<Node> ts;
+    static class Node {
+        int P;
+        int L;
+
+        public Node(int P, int L) {
+            this.P = P;
+            this.L = L;
+        }
+    }
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
