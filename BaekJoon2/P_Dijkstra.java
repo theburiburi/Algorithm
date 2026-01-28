@@ -2,22 +2,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 
-class Node implements Comparable<Node> {
-    int endPoint;
-    int cost;
 
-    Node(int endPoint, int cost) {
-        this.endPoint = endPoint;
-        this.cost = cost;
-    }
-
-    @Override
-    public int compareTo(Node O) {
-        return this.cost - O.cost;
-    }
-}
 
 public class P_Dijkstra {
+    static class Node implements Comparable<Node> {
+        int endPoint;
+        int cost;
+
+        Node(int endPoint, int cost) {
+            this.endPoint = endPoint;
+            this.cost = cost;
+        }
+
+        @Override
+        public int compareTo(Node O) {
+            return this.cost - O.cost;
+        }
+    }
 
     static final int INF = 999;
     static final int graph1Size = 6;
