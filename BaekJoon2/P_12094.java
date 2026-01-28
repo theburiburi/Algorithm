@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
-public class P_12100 {
+public class P_12094 {
     static int dx[] = {0, 0, -1, 1};
     static int dy[] = {-1, 1, 0, 0};
     static int N;
@@ -22,17 +22,24 @@ public class P_12100 {
     }
 
     public static void dfs(int arr[][], int count){
-        if(count >= 10) {
-            for(int i=0;i<N; i++){
-                for(int j=0; j<N; j++){
-                    answer = Math.max(answer,arr[i][j]);
-                }
+        int currentMax = 0;
+        for(int i=0;i<N; i++){
+            for(int j=0; j<N; j++){
+                currentMax = Math.max(currentMax,arr[i][j]);
             }
-            return;
         }
 
+        answer = Math.max(answer, currentMax);
+        if(currentMax * (1 << (10-count)) <= answer) return;
+
+        if(count >= 10) return;
+
+
         for(int i=0; i<4; i++){
-            dfs(move(arr, i), count+1);
+            int nextArr[][] = move(arr,i);
+            if(!isSame(arr, nextArr)){
+                dfs(nextArr, count+1);
+            }
         }
     }
     public static void goStraight(int i, int j, int arr[][], boolean visited[][], int direction){
@@ -99,5 +106,14 @@ public class P_12100 {
             }
         }
         return arr;
+    }
+
+    public static boolean isSame(int nowArr[][], int nextArr[][]){
+        for(int i=0; i<N; i++){
+            for(int j=0; j<N; j++){
+                if(nowArr[i][j] != nextArr[i][j]) return false;
+            }
+        }
+        return true;
     }
 }
