@@ -39,5 +39,3 @@ public class P_1562 { // dp, bit masking!!
         System.out.println(ans);
     }
 }
-
->>>>>>> f68673d97fe52b2d4854f4a3c666b835105485a5
