@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
-public class P_12094 {
+public class P_12094 { // backtracking
     static int dx[] = {0, 0, -1, 1};
     static int dy[] = {-1, 1, 0, 0};
     static int N;
