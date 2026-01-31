@@ -8,11 +8,13 @@ public class P_2098_2 {
     static int arr[][];
     static int dp[][];
     static final int INF = 16_000_001;
+    static int allVisit;
     public static void main(String args[]) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         N = Integer.parseInt(br.readLine());
         arr = new int[N][N];
+        allVisit = (1<<N)-1;
         for(int i=0;i<N;i++){
             arr[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
         }
@@ -22,29 +24,27 @@ public class P_2098_2 {
             Arrays.fill(dp[i], -1);
         }
         
-        System.out.println(dfs(0,1));
+        System.out.println(tsp(0,1));
     }
-    public static int dfs(int node, int visit){
-        if(visit == ((1<<N)-1)){
+    public static int tsp(int node, int visit){
+        if(visit == allVisit){
             if(arr[node][0] != 0){
-                
+                return arr[node][0];
             }
             return INF;
         } 
 
-        if(dp[node][visit] != -1){
+        // if(dp[node][visit] != -1){ // 필요한가 다시 생각하기
+        //     return dp[node][visit];
+        // }
 
-        }
+        dp[node][visit] = INF;
+
         for(int i=0; i<N; i++){
-            if (node == i) continue;
             int nextIdx = visit | (1<<i);
+            if(arr[node][i] == 0 || nextIdx == visit) continue;
 
-            if(nextIdx != visit){ 
-                if(arr[node][i] > 0 && dp[i][nextIdx] > dp[node][visit] + arr[node][i]){
-                    dp[i][nextIdx] = dp[node][visit] + arr[node][i];
-                    dfs(i, nextIdx);
-                }
-            }
+            dp[node][visit] = Math.min(dp[node][visit], tsp(i, nextIdx) + arr[node][i]);
         }
 
         return dp[node][visit];

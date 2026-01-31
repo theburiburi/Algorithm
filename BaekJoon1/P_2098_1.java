@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class P_2098 {
+public class P_2098_1 {
     static int ans = Integer.MAX_VALUE;
     static int N;
     static int arr[][];
