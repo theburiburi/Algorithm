@@ -34,9 +34,9 @@ public class P_2098_2 {
             return INF;
         } 
 
-        // if(dp[node][visit] != -1){ // 필요한가 다시 생각하기
-        //     return dp[node][visit];
-        // }
+        if(dp[node][visit] != -1){
+            return dp[node][visit];
+        }
 
         dp[node][visit] = INF;
 
