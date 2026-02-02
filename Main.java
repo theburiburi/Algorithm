@@ -43,7 +43,7 @@ public class Main {
 
         int maxVal = 0;
         for(int i=1; i<=K; i++){
-            maxVal = maxVal > dp[N-1][i] ? maxVal : dp[N-1][i];
+            maxVal = maxVal > dp[N][i] ? maxVal : dp[N][i];
         }
         System.out.println(maxVal);
     }
