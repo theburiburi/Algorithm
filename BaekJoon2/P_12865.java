@@ -1,13 +1,13 @@
 import java.io.*;
 import java.util.*;
 
-public class P_12865 {
+class P_12865 {
     static class Node{
         int W;
         int V;
         public Node(int W, int V){
             this.W = W;
-            this.V = v;
+            this.V = V;
         }
     }
     public static void main(String args[]) throws IOException{
@@ -19,7 +19,7 @@ public class P_12865 {
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
-        int dp[][] = new int[N][K+1];
+        int dp[][] = new int[N+1][K+1];
         Node info[] = new Node[N+1];
 
         for(int i=1; i<=N; i++){
@@ -32,7 +32,7 @@ public class P_12865 {
         for(int i=1; i<=N; i++){
             for(int j=0; j<=K; j++){
                 Node now = info[i];
-                if(j+now.W <= K){
+                if(j - now.W >= 0){
                     dp[i][j] = Math.max(dp[i-1][j-now.W]+now.V , dp[i-1][j]);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
                 }
                 else{
@@ -43,7 +43,7 @@ public class P_12865 {
 
         int maxVal = 0;
         for(int i=1; i<=K; i++){
-            maxVal = maxVal > dp[N-1][i] ? maxVal : dp[N-1][i];
+            maxVal = maxVal > dp[N][i] ? maxVal : dp[N][i];
         }
         System.out.println(maxVal);
     }
