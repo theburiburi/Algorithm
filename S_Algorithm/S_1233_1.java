@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class S1233_1 {
+public class S_1233_1 {
     static String arr[];
     public static void main(String args[]) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
