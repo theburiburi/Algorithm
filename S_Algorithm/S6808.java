@@ -29,7 +29,7 @@ public class S6808 {
             }
 
             solve(0, 0, 0);
-            sb.append("#" + t + " " + kyuWin + " " + dollWin);
+            sb.append("#" + t + " " + kyuWin + " " + dollWin+"\n");
         }
         System.out.println(sb);
     }
