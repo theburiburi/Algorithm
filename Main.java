@@ -1,13 +1,16 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
-    public static void main(String args[]) throws IOException{
+public class Main{
+    public static void main(String args[])throws IOException{
+        readInput();
+    }
+
+    public static void readInput() throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
         StringBuilder sb = new StringBuilder();
+        StringTokenizer st;
 
         st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
     }
 }
