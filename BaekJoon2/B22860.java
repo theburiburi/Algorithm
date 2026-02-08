@@ -58,12 +58,13 @@ public class B22860{
     public static void computeFolder(String curName){
         Folder now = folderMap.get(curName);
 
-        for(String childName : now.childFolder){
-            computeFolder(childName);
+        for(String child : now.childFolder){
+            computeFolder(child);
+            
+            Folder childFolder = folderMap.get(child);
 
-            Folder child = folderMap.get(childName);
-            now.allChildFile.addAll(child.allChildFile);
-            now.fileCnt += child.fileCnt;
+            now.fileCnt += childFolder.fileCnt;
+            now.allChildFile.addAll(childFolder.allChildFile);
         }
     }
 }
