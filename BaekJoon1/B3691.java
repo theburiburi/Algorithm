@@ -1,38 +1,14 @@
 import java.io.*;
 import java.util.*;
 
-public class Main{
-    static int n, b;
-    static int typeCnt;
-
-    static TreeMap<Integer, Integer> tm[]; // 성능, 가격
-    static HashMap<String, Integer> typeMap;
-    static HashMap<Integer, String> reverseMap;
-    static PriorityQueue<pqNode> myComputer;
-
+public class B3691{
     static StringBuilder sb;
+
+    static Map<String, TreeMap<Integer, Integer>> part;
+    static int n, b;
     public static void main(String args[])throws IOException{
         readInput();
-        Solution();
         System.out.println(sb);
-    }
-
-    static class pqNode implements Comparable<pqNode>{
-        int quality;
-        int price;
-        String type;
-
-        public pqNode(int quality, int price, String type){
-            this.quality = quality;
-            this.price = price;
-            this.type = type;
-        }
-
-        @Override
-        public int compareTo(pqNode o){
-            if(quality == o.quality) return o.price - price;
-            return o.quality - quality;
-        }
     }
 
     public static void readInput() throws IOException{
@@ -42,77 +18,73 @@ public class Main{
 
         int T = Integer.parseInt(br.readLine());
 
-        for(int t=0; t<T; t++){
+        while(T --> 0){
             st = new StringTokenizer(br.readLine());
             n = Integer.parseInt(st.nextToken());
             b = Integer.parseInt(st.nextToken());
+            int maxQ = 0;
+            int minQ = Integer.MAX_VALUE;
 
-            int prices[] = new int[n];
-            int qualities[] = new int[n];
-            String types[] = new String[n];
-
-            myComputer = new PriorityQueue<>();
-
-            int tempIdx = 0;
-
-            typeMap = new HashMap<>();
-            reverseMap = new HashMap<>();
+            part = new HashMap<>();
 
             for(int i=0; i<n; i++){
                 st = new StringTokenizer(br.readLine());
+
                 String type = st.nextToken();
-                String name = st.nextToken();
+                st.nextToken();
                 int price = Integer.parseInt(st.nextToken());
                 int quality = Integer.parseInt(st.nextToken());
 
-                if(!typeMap.containsKey(type)){
-                    reverseMap.put(tempIdx, type);
-                    typeMap.put(type, tempIdx++);
+                TreeMap<Integer, Integer> tm = part.computeIfAbsent(type, k -> new TreeMap<>());
+
+                Map.Entry<Integer, Integer> higherEntry = tm.ceilingEntry(quality);
+                if(higherEntry != null && higherEntry.getValue() < price ) continue; // 더 좋은 거 있을 때
+            
+                tm.put(quality, price);
+
+                // 더 안 좋은 거 있을 때
+                while(true){
+                    Map.Entry<Integer, Integer> lowerEntry = tm.lowerEntry(quality);
+                    if(lowerEntry != null && lowerEntry.getValue() >= price){
+                        tm.remove(lowerEntry.getKey());
+                    }else{
+                        break;
+                    }
                 }
 
-                types[i] = type;
-                prices[i] = price;
-                qualities[i] = quality;
-            }
-            typeCnt = typeMap.keySet().size();
-            tm = new TreeMap[typeCnt];
-            for(int i=0; i<typeCnt; i++){
-                tm[i] = new TreeMap<>();
+                maxQ = Math.max(maxQ, quality);
+                minQ = Math.min(minQ, quality);
             }
 
-            for(int i=0; i<n; i++){
-                tempIdx = typeMap.get(types[i]);
-                tm[tempIdx].put(qualities[i], prices[i]);
-            }
+            sb.append(find(minQ, maxQ));
         }
     }
 
-    public static void Solution(){
-        int totalPrice = 0;
-        for(int i=0; i<typeCnt; i++){
-            
-            Map.Entry<Integer, Integer> entry = tm[i].pollLastEntry();
-            
-            int tempKey = entry.getKey(); //성능 
-            int tempVal = entry.getValue(); //가격
-
-            tm[i].pollLastEntry();
-            myComputer.add(new pqNode(tempKey, tempVal, reverseMap.get(i)));
-            totalPrice += tempVal;
-        }
-        while(totalPrice > b){
-            pqNode now = myComputer.poll();
-            int tempIdx = typeMap.get(now.type);
-            
-            Map.Entry<Integer, Integer> entry = tm[tempIdx].pollLastEntry();
-            totalPrice -= now.price;
-            totalPrice += entry.getValue();
-            myComputer.add(new pqNode(entry.getKey(), entry.getValue(), reverseMap.get(tempIdx)));
-        }
+    static int find(int left, int right){
         int ans = 0;
-        while(!myComputer.isEmpty()){
-            ans = myComputer.poll().quality;
+        while(left <= right){
+            int mid = left + (right - left)/2;
+            if(check(mid)){
+                ans = mid;
+                left = mid+1;
+            }
+            else{
+                right = mid-1;
+            }
         }
-        sb.append(ans+"\n");
+        return ans;
+    }
+
+    static boolean check(int targetQual){
+        int totalPrice = 0;
+
+        for(TreeMap<Integer, Integer> tm : part.values()){
+            Map.Entry<Integer, Integer> entry = tm.ceilingEntry(targetQual);
+            if(entry == null) return false;
+
+            totalPrice += entry.getValue();
+            if(totalPrice > b) return false;
+        }
+        return true;
     }
 }
