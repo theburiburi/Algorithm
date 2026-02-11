@@ -21,15 +21,14 @@ public class B2015{
         st = new StringTokenizer(br.readLine());
         HashMap<Long, Long> map = new HashMap<>();
         long total = 0;
-        int ans = 0;
+        long ans = 0;
         map.put(0L, 1L);
         for(int i=1; i<=N; i++){
             total += Long.parseLong(st.nextToken());
 
-            long findNumCnt = map.getOrDefault(total - K, 0L);
-            ans += findNumCnt;
+            ans += map.getOrDefault(total - K, 0L);
 
-            map.put(total, findNumCnt +1);
+            map.put(total, map.getOrDefault(total, 0L) +1);
         }
 
         System.out.println(ans);
