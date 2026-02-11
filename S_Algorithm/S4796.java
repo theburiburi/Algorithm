@@ -2,44 +2,51 @@ import java.io.*;
 import java.util.*;
 
 public class S4796 {
-    static StringBuilder sb;
+    static BufferedReader br;
+    static StringTokenizer st;
+    static StringBuilder sb = new StringBuilder();
 
-    public static void main(String args[]) {
-        readInput();
-        System.out.print(sb);
-    }
-
-    public static void readInput() {
-        Scanner sc = new Scanner(System.in);
-        sb = new StringBuilder();
-
-        if (!sc.hasNextInt()) return;
-        int T = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        
+        String token = next();
+        if (token == null) return; 
+        int T = Integer.parseInt(token);
 
         for (int t = 1; t <= T; t++) {
-            int N = sc.nextInt();
+            int N = Integer.parseInt(next());
 
             boolean increase = true;
             int num = 0;
-            int count = -1;
+            int count = -1; 
             int ans = 0;
 
             for (int i = 0; i < N; i++) {
-                int temp = sc.nextInt();
+                int next = Integer.parseInt(next()); 
 
-                if (num < temp) { // 증가
+                if (num < next) { // 증가
                     if (!increase) {
                         count = 0;
                     }
                     count++;
                     increase = true;
-                } else { // 감소할 때
+                } else { // 감소하는 경우
                     if (count > 0) ans += count;
                     increase = false;
                 }
-                num = temp;
+                num = next;
             }
-            sb.append("#" + t + " " + ans + "\n");
+            sb.append("#").append(t).append(" ").append(ans).append("\n");
         }
+        System.out.print(sb);
+    }
+
+    static String next() throws IOException {
+        while (st == null || !st.hasMoreTokens()) {
+            String line = br.readLine();
+            if (line == null) return null;
+            st = new StringTokenizer(line);
+        }
+        return st.nextToken();
     }
 }
