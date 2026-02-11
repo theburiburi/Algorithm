@@ -56,7 +56,7 @@ public class B3691{
                 minQ = Math.min(minQ, quality);
             }
 
-            sb.append(find(minQ, maxQ));
+            sb.append(find(minQ, maxQ)+"\n");
         }
     }
 

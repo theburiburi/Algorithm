@@ -32,31 +32,16 @@ public class B14658{
             star[k][1] = Integer.parseInt(st.nextToken()); //y
         }
 
-        combination(0, new ArrayList<>(), 0);
-        sb.append(ans);
-    }
+        for(int i=1;i<K;i++){
+            for(int j=0; j<i; j++){
+                int minX = Math.min(star[i][0], star[j][0]);
+                int minY = Math.min(star[i][1], star[j][1]);
 
-    public static void combination(int idx, List<Integer> list, int selCnt){
-        if(selCnt == 2){
-            int minX = INF;
-            int minY = INF;
-            for(int now : list){
-                minX = Math.min(minX, star[now][0]);
-                minY = Math.min(minY, star[now][1]);
+                int count = find(minX, minY);
+                ans = Math.max(ans, count);
             }
-
-            int count = find(minX, minY); // 별 카운트
-            ans = Math.max(count, ans);
-            return;
         }
-        if(idx == K) return;
-
-        list.add(idx);
-        combination(idx+1, list, selCnt+1);
-        
-        list.remove(list.size()-1);
-        combination(idx+1, list, selCnt);
-        
+        sb.append(K - ans);
     }
 
     static int find(int x, int y){
