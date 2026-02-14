@@ -3,88 +3,159 @@ import java.io.*;
 
 public class B17472 {
     static int N, M;
-    static Queue<int[]> queue;
-    static LinkedList<Integer> landConnect[];
-    static List<int[]> landPostion[];
-    static boolean visited[][];
+    static int[] dx = {-1, 1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
 
-    static int dx[] = {-1, 1, 0, 0};
-    static int dy[] = {0, 0, -1, 1};
-    static int arr[][];
+    static List<int[]>[] landPosition;
+    static int[] parent;
 
-    static int landNum = 1;
-    public static void main(String[] args) throws IOException{
+    static boolean[][] visited;
+    static int[][] arr;
+
+    static int landNum; 
+    static PriorityQueue<Edge> edges = new PriorityQueue<>();
+    static StringBuilder sb;
+
+    static class Edge implements Comparable<Edge> {
+        int from, to, weight;
+        Edge(int from, int to, int weight) {
+            this.from = from;
+            this.to = to;
+            this.weight = weight;
+        }
+        @Override
+        public int compareTo(Edge o) {
+            return this.weight - o.weight;
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
         inputFile();
+        connetBridge();
+        solveMST(); 
+        System.out.println(sb);
     }
 
     public static void inputFile() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        sb = new StringBuilder();
 
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
         arr = new int[N][M];
         visited = new boolean[N][M];
-        queue = new LinkedList<>();
-
+        landNum = 0;
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < M; j++) {
                 arr[i][j] = Integer.parseInt(st.nextToken());
-                if(visited[i][j] == false && arr[i][j] == 1){
-                    queue.offer(new int[]{i, j});
-                }
-            }
-        }
-        while(!queue.isEmpty()){
-            int ij[] = queue.poll();
-            if(visited[ij[0]][ij[1]] == true) continue;
-            bfs(ij[0], ij[1]);
-        }
-
-        solution();
-    }
-
-    public static void solution() {
-        landConnect = new LinkedList[landNum];
-        boolean visited[] = new boolean[landNum];
-        landPostion = new List[landNum];
-
-        for(int i=0; i<N; i++){
-            for(int j=0; j<M; j++){
-                if(arr[i][j] != 0){
-                    landPostion[arr[i][j]].add(new int[]{i, j});
-                }
             }
         }
 
-        connectLand(1);
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (!visited[i][j] && arr[i][j] == 1) {
+                    bfs(i, j);
+                }
+            }
+        }
     }
+
     public static void bfs(int y, int x) {
         Queue<int[]> que = new LinkedList<>();
+        que.add(new int[]{y, x});
+        visited[y][x] = true;
 
-        while(!que.isEmpty()) {
-            int[] cur = queue.poll();
-            int nx = cur[0];
-            int ny = cur[1];
-            arr[x][y] = landNum;
+        landNum++;
+        while (!que.isEmpty()) {
+            int[] cur = que.poll();
+            int cy = cur[0];
+            int cx = cur[1];
+            arr[cy][cx] = landNum;
 
-            for(int i=0;i<4; i++){
-                int nx = x + dx[i];
-                int ny = y + dy[i];
+            for (int i = 0; i < 4; i++) {
+                int ny = cy + dy[i];
+                int nx = cx + dx[i];
 
-                if(nx < 0 || ny < 0 || nx >= N || ny >= M) continue;
-                if(visited[nx][ny]) continue;
-
-                visited[nx][ny] = true;
-                queue.offer(new int[]{nx, ny});
+                if (ny < 0 || nx < 0 || ny >= N || nx >= M) continue;
+                if (!visited[ny][nx] && arr[ny][nx] == 1) {
+                    visited[ny][nx] = true;
+                    que.offer(new int[]{ny, nx});
+                }
             }
         }
-        landNum++;
     }
-    public static void connectLand(int landNum, int bridgeLength) {
-        
+
+    public static void connetBridge() {
+        landPosition = new ArrayList[landNum + 1];
+        for (int i = 1; i <= landNum; i++) {
+            landPosition[i] = new ArrayList<>();
+        }
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (arr[i][j] > 0) {
+                    landPosition[arr[i][j]].add(new int[]{i, j});
+                }
+            }
+        }
+
+        for (int i = 1; i <= landNum; i++) {
+            for (int[] yx : landPosition[i]) {
+                for (int j = 0; j < 4; j++) {
+                    int y = yx[0];
+                    int x = yx[1];
+                    int dist = 0;
+
+                    while (true) {
+                        y += dy[j];
+                        x += dx[j];
+
+                        if (y < 0 || x < 0 || y >= N || x >= M) break;
+                        if (arr[y][x] == i) break;  
+                        if (arr[y][x] > 0) {
+                            if (dist >= 2) {
+                                edges.add(new Edge(i, arr[y][x], dist));
+                            }
+                            break;
+                        }
+                        dist++;
+                    }
+                }
+            }
+        }
     }
-    
+
+    public static void solveMST() {
+        parent = new int[landNum + 1];
+        for (int i = 1; i <= landNum; i++) parent[i] = i;
+
+        int totalWeight = 0;
+        int count = 0;
+
+        while (!edges.isEmpty()) {
+            Edge edge = edges.poll();
+            if (find(edge.from) != find(edge.to)) {
+                union(edge.from, edge.to);
+                totalWeight += edge.weight;
+                count++;
+            }
+        }
+
+        if (count == landNum - 1) sb.append(totalWeight);
+        else sb.append(-1);
+    }
+
+    public static int find(int a) {
+        if (parent[a] == a) return a;
+        return parent[a] = find(parent[a]);
+    }
+
+    public static void union(int a, int b) {
+        a = find(a);
+        b = find(b);
+        if (a != b) parent[b] = a;
+    }
 }
