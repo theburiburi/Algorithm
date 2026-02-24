@@ -27,18 +27,16 @@ public class B4256{
             inorder = new int[N];
             visited = new boolean[N];
 
-            preIdxMap = new HashMap<>();
             inIdxMap = new HashMap<>();
             st = new StringTokenizer(br.readLine());
             for(int i=0; i<N; i++){
                 preorder[i] = Integer.parseInt(st.nextToken());
-                preIdxMap.put(preorder[i], i);
             }
 
             st = new StringTokenizer(br.readLine());
             for(int i=0; i<N; i++){
                 inorder[i] = Integer.parseInt(st.nextToken());
-                inIdxMap.put(inorder[i], i);
+                inIdxMap.put(inorder[i], i); // inorderIdx[inorder[i]] = i 로 사용 가능
             }
 
             idx = -1;
