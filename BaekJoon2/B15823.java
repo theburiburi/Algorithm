@@ -30,8 +30,7 @@ public class B15823{
         num = new int[500_001];
         while(minSize <= maxSize){
             int mid = (maxSize + minSize)/2;
-            //
-            System.out.println("minSize: " + minSize + " maxSize: " + maxSize);
+            //System.out.println("minSize: " + minSize + " maxSize: " + maxSize);
             if(solution(mid)){
                 minSize = mid+1;
             }
@@ -69,10 +68,13 @@ public class B15823{
         return false;
     }
     static void cleanup(int left, int right) {
-        for (int i = left; i <= Math.min(right, N - 1); i++) {
-            if (num[arr[i]] > 0) {
-                num[arr[i]]--;
-            }
+        // for (int i = left; i <= Math.min(right, N - 1); i++) {
+        //     if (num[arr[i]] > 0) {
+        //         num[arr[i]]--;
+        //     }
+        // }
+        while(left <= right){
+            num[arr[left++]]--;
         }
     }
 }
