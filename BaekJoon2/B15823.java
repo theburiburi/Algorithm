@@ -68,11 +68,6 @@ public class B15823{
         return false;
     }
     static void cleanup(int left, int right) {
-        // for (int i = left; i <= Math.min(right, N - 1); i++) {
-        //     if (num[arr[i]] > 0) {
-        //         num[arr[i]]--;
-        //     }
-        // }
         while(left <= right){
             num[arr[left++]]--;
         }
