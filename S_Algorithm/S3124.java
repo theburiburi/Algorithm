@@ -3,7 +3,8 @@ import java.util.*;
 
 public class S3124{
     static StringBuilder sb;
-    static int V, E, ans;
+    static int V, E;
+    static long ans;
     static int[] arr;
     static List<Node> list;
     public static void main(String args[])throws IOException{
