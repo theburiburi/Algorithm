@@ -9,8 +9,8 @@ public class Solution{
 
     public static void readInput() throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        sb = new StringBuilder();
         StringTokenizer st;
 
+        sb = new StringBuilder();
     }
 }

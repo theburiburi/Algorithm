@@ -2,7 +2,6 @@ import java.io.*;
 import java.util.*;
 
 public class B33156{
-    static StringBuilder sb;
     static int N;
     static int arr[];
     static int ans;
@@ -30,7 +29,6 @@ public class B33156{
             int diffCnt = 0;
 
             for (int offset = 0;  0 <= mid - offset  && mid + 1 + offset < N; offset++) {
-                
                 int leftVal = arr[mid - offset];
                 int leftCnt = map.getOrDefault(leftVal, 0);
                 if (leftCnt == 0) diffCnt++;

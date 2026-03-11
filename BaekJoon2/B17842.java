@@ -3,6 +3,9 @@ import java.util.*;
 
 public class B17842{
     static StringBuilder sb;
+    static int N;
+    static int arr[];
+    // static List<Integer> list[];
     public static void main(String args[])throws IOException{
         inputFile();
     }
@@ -10,7 +13,23 @@ public class B17842{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
-        sb = new StringBuilder();
-        st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(br.readLine());
+        arr = new int[N];
+        // list = new ArrayList[N];
+        for(int i=1; i<N; i++){
+            st = new StringTokenizer(br.readLine());
+            int left = Integer.parseInt(st.nextToken());
+            int right = Integer.parseInt(st.nextToken());
+
+            arr[left]++;
+            arr[right]++;
+        }
+
+        int count = 0;
+        for(int i=0; i<N; i++){
+            if(arr[i] == 1) count++;
+        }
+        System.out.println((int)Math.ceil((double)count / 2.0));
+
     }
 }
