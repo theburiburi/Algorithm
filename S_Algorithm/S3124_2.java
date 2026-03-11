@@ -1,25 +1,27 @@
 import java.io.*;
 import java.util.*;
 
-public class S3124{
+public class S3124_2{
     static StringBuilder sb;
     static int V, E;
     static long ans;
-    static int[] arr;
-    static List<Node> list;
+    static List<Node> list[];
     public static void main(String args[])throws IOException{
         readInput();
         System.out.println(sb.toString());
     }
 
-    static class Node{
-        int left;
-        int right;
+    static class Node implements Comparable<Node>{
+        int node;
         int value;
-        public Node(int left, int right, int value){
-            this.left=left;
-            this.right=right;
+        public Node(int node, int value){
+            this.node=node;
             this.value=value;
+        }
+
+        @Override
+        public int compareTo(Node o){
+            return Integer.compare(value, o.value);
         }
     }
     public static void readInput() throws IOException{
@@ -35,11 +37,9 @@ public class S3124{
             V = Integer.parseInt(st.nextToken());
             E = Integer.parseInt(st.nextToken());
             
-            list = new ArrayList<>();
-            arr = new int[V+1];
-
+            list = new ArrayList[V+1];
             for(int i=1; i<=V; i++){
-                arr[i] = i;
+                list[i] = new ArrayList<>();
             }
 
             for(int i=0; i<E; i++){
@@ -47,35 +47,36 @@ public class S3124{
                 int left = Integer.parseInt(st.nextToken());
                 int right = Integer.parseInt(st.nextToken());
                 int value = Integer.parseInt(st.nextToken());
-                list.add(new Node(left, right, value));
+                list[left].add(new Node(right, value));
+                list[right].add(new Node(left, value));
             }
 
-            list.sort((s1,s2) -> Integer.compare(s1.value, s2.value));
             solve();
             sb.append(ans).append("\n");
         }
     }
     public static void solve(){
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        boolean visited[] = new boolean[V+1];
+        pq.add(new Node(1, 0));
         ans = 0;
-        for(Node now : list){
-            int y = now.left;
-            int x = now.right;
-            if(find(y) != find(x)){
-                union(y, x);
-                ans += now.value;
-            }
-        }
-    }
-    public static int find(int x){
-        if(x == arr[x]) return x;
-        return arr[x] = find(arr[x]);
-    }
+        int count = 0;
 
-    public static void union(int y, int x){
-        y = find(y);
-        x = find(x);
-        if(y != x){
-            arr[y] = x;
+        while(!pq.isEmpty()){
+            Node now = pq.poll();
+            
+            if(visited[now.node]) continue;
+
+            ans += now.value;
+            visited[now.node] = true;
+            count++;
+
+            if(count == V) break;
+            
+            for(Node next : list[now.node]){
+                if(visited[next.node]) continue;
+                pq.add(next);
+            }
         }
     }
 }
