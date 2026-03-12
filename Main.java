@@ -11,6 +11,5 @@ public class Main{
         StringTokenizer st;
 
         sb = new StringBuilder();
-        st = new StringTokenizer(br.readLine());
     }
 }
