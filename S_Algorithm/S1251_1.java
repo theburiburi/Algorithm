@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class S1251{
+public class S1251_1{
     static StringBuilder sb;
     static int N;
     static double E;
