@@ -5,7 +5,6 @@ public class B17842{
     static StringBuilder sb;
     static int N;
     static int arr[];
-    // static List<Integer> list[];
     public static void main(String args[])throws IOException{
         inputFile();
     }
@@ -15,7 +14,6 @@ public class B17842{
 
         N = Integer.parseInt(br.readLine());
         arr = new int[N];
-        // list = new ArrayList[N];
         for(int i=1; i<N; i++){
             st = new StringTokenizer(br.readLine());
             int left = Integer.parseInt(st.nextToken());
@@ -29,7 +27,7 @@ public class B17842{
         for(int i=0; i<N; i++){
             if(arr[i] == 1) count++;
         }
-        System.out.println((int)Math.ceil((double)count / 2.0));
+        System.out.println((count+1)/2);
 
     }
 }
