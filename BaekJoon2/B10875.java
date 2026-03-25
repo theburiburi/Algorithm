@@ -47,8 +47,8 @@ public class B10875 {
             int minHit = t + 1;
             if (nowDir == 0) minHit = Math.min(minHit, L - nowX + 1);
             else if (nowDir == 1) minHit = Math.min(minHit, L - nowY + 1);
-            else if (nowDir == 2) minHit = Math.min(minHit, nowX - (-L) + 1);
-            else if (nowDir == 3) minHit = Math.min(minHit, nowY - (-L) + 1);
+            else if (nowDir == 2) minHit = Math.min(minHit, nowX +L + 1);
+            else if (nowDir == 3) minHit = Math.min(minHit, nowY +L + 1);
 
             for (Line target : lines) {
                 int dist = getDist(nowX, nowY, nowDir, target);
