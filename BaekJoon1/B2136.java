@@ -33,7 +33,6 @@ public class B2136{
 
         int time = 0;
         boolean isLeft = false;
-        int idx = 0;
         int leftCnt = 0;
         for(int i=0; i<N; i++){
             int now = Integer.parseInt(br.readLine());
