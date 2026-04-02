@@ -49,7 +49,7 @@ void solve(int left, int right){
                 ans = now.second + next.second;
                 return;
             }
-            
+            visited[next.first] = true;
             dq.push_back({next.first, now.second+ next.second});
         }
     }
