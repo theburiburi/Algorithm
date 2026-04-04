@@ -5,7 +5,7 @@ using namespace std;
 
 deque<int> dq;
 int N;
-int answer;
+long long answer;
 
 int main(){
     ios_base::sync_with_stdio(false);

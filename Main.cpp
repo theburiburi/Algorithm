@@ -1,56 +1,50 @@
 #include <iostream>
 #include <vector>
-#include <deque>
+#include <queue>
 
 using namespace std;
 
-
 int N, M;
-int ans;
-vector<pair<int, int>> tree[1001];
+vector<vector<int>> list;
+vector<int> degree;
+priority_queue<int, vector<int>, greater<int>> pq;
 
-void solve(int left, int right);
+void solve(){
+    // vector<bool> visited(N+1, false);
+    for(int i=1; i<=N; i++){
+        if(degree[i] == 0){
+            pq.push(i);
+        }
+    }
+
+    while(!pq.empty()){
+        int now = pq.top();
+        pq.pop();
+
+        cout << now << " ";
+        for(int next : list[now]){
+            degree[next]--;
+
+            if(degree[next] == 0){
+                pq.push(next);
+            }
+        }
+    }
+}
 
 int main(){
     cin.tie(0)->sync_with_stdio(0);
 
     cin >> N >> M;
-    for(int i=1; i<N; i++){
-        int u, v, w;
-        cin >> u >> v >> w;
-        tree[u].push_back({v, w});
-        tree[v].push_back({u, w});
-    }
-
+    list.resize(N+1);
+    degree.resize(N+1, 0);
     for(int i=0; i<M; i++){
-        ans = 0;
         int left, right;
         cin >> left >> right;
 
-        solve(left, right);
-        cout << ans << "\n";
+        list[left].push_back(right);
+        degree[right]++;
     }
-}
 
-void solve(int left, int right){
-    bool visited[1001] = {false};
-    visited[left] = true;
-
-    deque<pair<int,int>> dq;
-    dq.push_back({left, 0});
-
-    while(!dq.empty()){
-        auto now = dq.front();
-        dq.pop_front();
-        
-        for(auto next : tree[now.first]){
-            if(visited[next.first]) continue;
-            if(next.first == right){
-                ans = now.second + next.second;
-                return;
-            }
-            
-            dq.push_back({next.first, now.second+ next.second});
-        }
-    }
+    solve();
 }
