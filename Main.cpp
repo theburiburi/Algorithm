@@ -1,65 +1,95 @@
 #include <iostream>
-#include <algorithm>
-#include <deque>
 #include <vector>
+#include <string>
+#include <algorithm>
+#include <climits>
 
 using namespace std;
 
-int N, M;
-vector<vector<pair<int, int>>> list;
-int start_num, end_num;
+int N;
+long long ans = LLONG_MIN;
+string expression;
+vector<bool> parenthesis;
 
-bool bfs(int value){
-    vector<bool> visited(N+1, false);
-    deque<int> dq;
-    dq.push_back(start_num);
-    visited[start_num] = true;
-
-    while(!dq.empty()){
-        int now = dq.front();
-        dq.pop_front();
-
-        for(auto next : list[now]){
-            if(next.second < value) continue;
-            if(visited[next.first]) continue;
-            if(next.first == end_num) return true;
-
-            visited[next.first] = true;
-            dq.push_back(next.first);
-        }
-    }
-    return false;
+long long calculate(long long a, long long b, char op) {
+    if (op == '+') return a + b;
+    else if (op == '-') return a - b;
+    else return a * b;
 }
 
-int main(){
+long long solve() {
+    vector<long long> nums;
+    vector<char> ops;
+
+    for (int i = 0; i < N / 2; i++) {
+        if (parenthesis[i]) {
+            long long res = calculate(expression[i * 2] - '0', expression[i * 2 + 2] - '0', expression[i * 2 + 1]);
+            nums.push_back(res);
+            
+            if (i + 1 < N / 2) {
+                ops.push_back(expression[i * 2 + 3]);
+                i++;
+            }
+        } else {
+            nums.push_back(expression[i * 2] - '0');
+            ops.push_back(expression[i * 2 + 1]);
+        }
+    }
+
+    if (nums.size() <= ops.size()) {
+        nums.push_back(expression[N - 1] - '0');
+    }
+
+    vector<long long> nums2;
+    vector<char> ops2;
+    if (!nums.empty()) nums2.push_back(nums[0]);
+
+    for (int i = 0; i < (int)ops.size(); i++) {
+        if (ops[i] == '*') {
+            long long last_num = nums2.back();
+            nums2.pop_back();
+            nums2.push_back(calculate(last_num, nums[i + 1], '*'));
+        } else {
+            ops2.push_back(ops[i]);
+            nums2.push_back(nums[i + 1]);
+        }
+    }
+
+    long long final_res = nums2[0];
+    for (int i = 0; i < (int)ops2.size(); i++) {
+        final_res = calculate(final_res, nums2[i + 1], ops2[i]);
+    }
+
+    return final_res;
+}
+
+void dfs(int depth) {
+    if (depth >= N / 2) {
+        ans = max(ans, solve());
+        return;
+    }
+
+    parenthesis[depth] = true;
+    dfs(depth + 2);
+    
+    parenthesis[depth] = false;
+    dfs(depth + 1);
+}
+
+int main() {
     cin.tie(0)->sync_with_stdio(0);
 
-    cin >> N >> M;
-    list.resize(N+1);
+    cin >> N >> expression;
 
-    int max_weight = 0;
-    for(int i=0; i<M; i++){
-        int A,B,C;
-        cin >> A >> B >> C;
-        list[A].push_back({B, C});
-        list[B].push_back({A, C});
-        max_weight = max(max_weight, C);
-    }
-    cin >> start_num >> end_num;
-
-    int left = 1;
-    int right = max_weight;
-    int answer = 0;
-    while(left <= right){
-        int mid = left + (right-left)/2;
-        if(bfs(mid)){
-            answer = mid;
-            left = mid+1;
-        }
-        else{
-            right = mid - 1;
-        }
+    if (N == 1) {
+        cout << expression << "\n";
+        return 0;
     }
 
-    cout << answer;
+    parenthesis.resize(N / 2, false);
+    dfs(0);
+
+    cout << ans << "\n";
+
+    return 0;
 }
