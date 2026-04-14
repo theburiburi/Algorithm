@@ -1,0 +1,15 @@
+# Compiled binaries
+*.exe
+*.out
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Java compiled files
+*.class
+out/
