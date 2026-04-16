@@ -1,36 +1,50 @@
-//#include <bits/stdc++.h>
-
 #include <iostream>
-#include <algorithm>
+#include <bitset>
+#include <cstring>
 
 using namespace std;
 
-long long N;
-int K;
+bitset<501> taller[501];
+bitset<501> smaller[501];
+
 int main(){
-    cin.tie(0)->sync_with_stdio(0);
+    int T;
+    cin >> T;
 
-    cin >> N >> K;
-    
-    long long low = 1;
-    long long high = N*N;
-    long long ans = 0;
-    while(low <= high){
-        long long mid = (low + high)/2;
-        long long count = 0;
+    for(int t=1; t<=T; t++){
+        int N, M;
+        cin >> N >> M;
 
+        for(int i=1; i<N; i++){
+            taller[i].reset();
+            smaller[i].reset();
+        }
+
+        for(int i=0; i<M; i++){
+            int left, right;
+            cin >> left >> right;
+
+            taller[left].set(right);
+            smaller[right].set(left);
+        }
+
+        for(int k=1; k<=N; k++){
+            for(int i=1; i<=N; i++){
+                if(taller[i].test(k)){
+                    taller[i] |= smaller[k];
+                }
+                if(smaller[i].test(k)){
+                    smaller[i] |= smaller[k];
+                }
+            }
+        }
+
+        int ans = 0;
         for(int i=1; i<=N; i++){
-            count += min(N, mid/i);
+            if(taller[i].count() + smaller[i].count() == N - 1){
+                ans++;
+            }
         }
-
-        if (count >= K){
-            ans = mid;
-            high = mid-1;
-        }
-        else{
-            low = mid+1;
-        }
+        cout << "#" << t << " " << ans << "\n";
     }
-
-    cout << ans;
 }
