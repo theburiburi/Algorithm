@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
@@ -21,7 +22,8 @@ void floyd(){
 
     for(int i=1; i<= N; i++){
         for(int j=1; j<=N; j++){
-            cout << arr[i][j] << " ";
+            if(arr[i][j] == INF) cout << 0 << " ";
+            else cout << arr[i][j] << " ";
         }
         cout << "\n";
     }
